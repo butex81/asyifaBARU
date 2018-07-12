@@ -1,0 +1,1531 @@
+SET FOREIGN_KEY_CHECKS=0;
+CREATE INDEX `ppn` ON `akun_bayar`(`ppn`) USING BTREE ;
+CREATE INDEX `loket` ON `antriloket`(`loket`) USING BTREE ;
+CREATE INDEX `antrian` ON `antriloket`(`antrian`) USING BTREE ;
+CREATE INDEX `kapasitas` ON `aplicare_ketersediaan_kamar`(`kapasitas`) USING BTREE ;
+CREATE INDEX `tersedia` ON `aplicare_ketersediaan_kamar`(`tersedia`) USING BTREE ;
+CREATE INDEX `tersediapria` ON `aplicare_ketersediaan_kamar`(`tersediapria`) USING BTREE ;
+CREATE INDEX `tersediawanita` ON `aplicare_ketersediaan_kamar`(`tersediawanita`) USING BTREE ;
+CREATE INDEX `tersediapriawanita` ON `aplicare_ketersediaan_kamar`(`tersediapriawanita`) USING BTREE ;
+CREATE INDEX `status` ON `bangsal`(`status`) USING BTREE ;
+CREATE TABLE `berkas_digital_perawatan` (
+`no_rawat`  varchar(17) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`kode`  varchar(10) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`lokasi_file`  varchar(600) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+PRIMARY KEY (`no_rawat`, `kode`),
+CONSTRAINT `berkas_digital_perawatan_ibfk_1` FOREIGN KEY (`no_rawat`) REFERENCES `reg_periksa` (`no_rawat`) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT `berkas_digital_perawatan_ibfk_2` FOREIGN KEY (`kode`) REFERENCES `master_berkas_digital` (`kode`) ON DELETE RESTRICT ON UPDATE CASCADE,
+INDEX `kode` (`kode`) USING BTREE 
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+ALTER TABLE `billing` MODIFY COLUMN `noindex`  int(11) NOT NULL FIRST ;
+ALTER TABLE `billing` DROP PRIMARY KEY;
+CREATE TABLE `bridging_dukcapil` (
+`no_rkm_medis`  varchar(15) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`no_id`  varchar(10) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+PRIMARY KEY (`no_rkm_medis`),
+CONSTRAINT `bridging_dukcapil_ibfk_1` FOREIGN KEY (`no_rkm_medis`) REFERENCES `pasien` (`no_rkm_medis`) ON DELETE CASCADE ON UPDATE CASCADE
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+CREATE TABLE `bridging_rujukan_bpjs` (
+`no_sep`  varchar(40) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`tglRujukan`  date NULL DEFAULT NULL ,
+`ppkDirujuk`  varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`nm_ppkDirujuk`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`jnsPelayanan`  enum('1','2') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`catatan`  varchar(200) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`diagRujukan`  varchar(10) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`nama_diagRujukan`  varchar(400) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`tipeRujukan`  enum('0. Penuh','1. Partial','2. Rujuk Balik') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`poliRujukan`  varchar(15) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`nama_poliRujukan`  varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`no_rujukan`  varchar(40) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`user`  varchar(25) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+PRIMARY KEY (`no_sep`),
+CONSTRAINT `bridging_rujukan_bpjs_ibfk_1` FOREIGN KEY (`no_sep`) REFERENCES `bridging_sep` (`no_sep`) ON DELETE CASCADE ON UPDATE CASCADE
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+ALTER TABLE `bridging_sep` MODIFY COLUMN `no_rujukan`  varchar(40) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `tglrujukan`;
+ALTER TABLE `bridging_sep` MODIFY COLUMN `nmdiagnosaawal`  varchar(400) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `diagawal`;
+ALTER TABLE `bridging_sep` MODIFY COLUMN `kdpolitujuan`  varchar(15) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `nmdiagnosaawal`;
+ALTER TABLE `bridging_sep` MODIFY COLUMN `lakalantas`  enum('0','1') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `klsrawat`;
+ALTER TABLE `bridging_sep` MODIFY COLUMN `jkel`  enum('L','P') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `peserta`;
+ALTER TABLE `bridging_sep` ADD COLUMN `asal_rujukan`  enum('1. Faskes 1','2. Faskes 2(RS)') CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `tglpulang`;
+ALTER TABLE `bridging_sep` ADD COLUMN `eksekutif`  enum('0. Tidak','1.Ya') CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `asal_rujukan`;
+ALTER TABLE `bridging_sep` ADD COLUMN `cob`  enum('0. Tidak','1.Ya') CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `eksekutif`;
+ALTER TABLE `bridging_sep` ADD COLUMN `penjamin`  varchar(15) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `cob`;
+ALTER TABLE `bridging_sep` ADD COLUMN `notelep`  varchar(40) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `penjamin`;
+CREATE INDEX `jam_masuk` ON `closing_kasir`(`jam_masuk`) USING BTREE ;
+CREATE INDEX `jam_pulang` ON `closing_kasir`(`jam_pulang`) USING BTREE ;
+DROP TABLE `data_hais`;
+CREATE TABLE `data_HAIs` (
+`tanggal`  date NOT NULL ,
+`no_rawat`  varchar(17) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`ETT`  int(11) NULL DEFAULT NULL ,
+`CVL`  int(11) NULL DEFAULT NULL ,
+`IVL`  int(11) NULL DEFAULT NULL ,
+`UC`  int(11) NULL DEFAULT NULL ,
+`VAP`  int(11) NULL DEFAULT NULL ,
+`IAD`  int(11) NULL DEFAULT NULL ,
+`PLEB`  int(11) NULL DEFAULT NULL ,
+`ISK`  int(11) NULL DEFAULT NULL ,
+`DEKU`  enum('IYA','TIDAK') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`SPUTUM`  varchar(200) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`DARAH`  varchar(200) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`URINE`  varchar(200) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`ANTIBIOTIK`  varchar(200) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+PRIMARY KEY (`tanggal`, `no_rawat`),
+CONSTRAINT `data_HAIs_ibfk_1` FOREIGN KEY (`no_rawat`) REFERENCES `reg_periksa` (`no_rawat`) ON DELETE CASCADE ON UPDATE CASCADE,
+INDEX `no_rawat` (`no_rawat`) USING BTREE ,
+INDEX `ETT` (`ETT`) USING BTREE ,
+INDEX `CVL` (`CVL`) USING BTREE ,
+INDEX `IVL` (`IVL`) USING BTREE ,
+INDEX `SPUTUM` (`SPUTUM`) USING BTREE ,
+INDEX `ANTIBIOTIK` (`ANTIBIOTIK`) USING BTREE ,
+INDEX `DARAH` (`DARAH`) USING BTREE ,
+INDEX `URINE` (`URINE`) USING BTREE ,
+INDEX `DEKU` (`DEKU`) USING BTREE ,
+INDEX `ISK` (`ISK`) USING BTREE ,
+INDEX `PLEB` (`PLEB`) USING BTREE ,
+INDEX `IAD` (`IAD`) USING BTREE ,
+INDEX `VAP` (`VAP`) USING BTREE ,
+INDEX `UC` (`UC`) USING BTREE 
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+ALTER TABLE `databarang` ADD COLUMN `kode_kategori`  char(4) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `kode_industri`;
+ALTER TABLE `databarang` ADD COLUMN `kode_golongan`  char(4) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `kode_kategori`;
+ALTER TABLE `databarang` ADD CONSTRAINT `databarang_ibfk_4` FOREIGN KEY (`kode_industri`) REFERENCES `industrifarmasi` (`kode_industri`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `databarang` ADD CONSTRAINT `databarang_ibfk_5` FOREIGN KEY (`kode_kategori`) REFERENCES `kategori_barang` (`kode`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `databarang` ADD CONSTRAINT `databarang_ibfk_6` FOREIGN KEY (`kode_golongan`) REFERENCES `golongan_barang` (`kode`) ON DELETE RESTRICT ON UPDATE CASCADE;
+CREATE INDEX `kelas3` ON `databarang`(`kelas3`) USING BTREE ;
+CREATE INDEX `utama` ON `databarang`(`utama`) USING BTREE ;
+CREATE INDEX `vip` ON `databarang`(`vip`) USING BTREE ;
+CREATE INDEX `vvip` ON `databarang`(`vvip`) USING BTREE ;
+CREATE INDEX `beliluar` ON `databarang`(`beliluar`) USING BTREE ;
+CREATE INDEX `jualbebas` ON `databarang`(`jualbebas`) USING BTREE ;
+CREATE INDEX `karyawan` ON `databarang`(`karyawan`) USING BTREE ;
+CREATE INDEX `expire` ON `databarang`(`expire`) USING BTREE ;
+CREATE INDEX `status` ON `databarang`(`status`) USING BTREE ;
+CREATE INDEX `kode_kategori` ON `databarang`(`kode_kategori`) USING BTREE ;
+CREATE INDEX `kode_golongan` ON `databarang`(`kode_golongan`) USING BTREE ;
+ALTER TABLE `databarang` DROP FOREIGN KEY `databarang_ibfk_4`;
+CREATE INDEX `no_rawat` ON `detail_beri_diet`(`no_rawat`) USING BTREE ;
+ALTER TABLE `detail_beri_diet` DROP PRIMARY KEY;
+CREATE INDEX `besarppn` ON `detail_nota_inap`(`besarppn`) USING BTREE ;
+CREATE INDEX `besar_bayar` ON `detail_nota_inap`(`besar_bayar`) USING BTREE ;
+CREATE INDEX `besarppn` ON `detail_nota_jalan`(`besarppn`) USING BTREE ;
+CREATE INDEX `besar_bayar` ON `detail_nota_jalan`(`besar_bayar`) USING BTREE ;
+CREATE TABLE `detail_obat_racikan` (
+`tgl_perawatan`  date NOT NULL ,
+`jam`  time NOT NULL ,
+`no_rawat`  varchar(17) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`no_racik`  varchar(2) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`kode_brng`  varchar(15) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+PRIMARY KEY (`tgl_perawatan`, `jam`, `no_rawat`, `no_racik`, `kode_brng`),
+CONSTRAINT `detail_obat_racikan_ibfk_1` FOREIGN KEY (`no_rawat`) REFERENCES `reg_periksa` (`no_rawat`) ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT `detail_obat_racikan_ibfk_2` FOREIGN KEY (`kode_brng`) REFERENCES `databarang` (`kode_brng`) ON DELETE RESTRICT ON UPDATE CASCADE,
+INDEX `no_rawat` (`no_rawat`) USING BTREE ,
+INDEX `kode_brng` (`kode_brng`) USING BTREE 
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+CREATE TABLE `detail_pengeluaran_obat_bhp` (
+`no_keluar`  varchar(15) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`kode_brng`  varchar(15) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`kode_sat`  char(4) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`no_batch`  varchar(10) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`jumlah`  double NOT NULL ,
+`harga_beli`  double NOT NULL ,
+`total`  double NOT NULL ,
+CONSTRAINT `detail_pengeluaran_obat_bhp_ibfk_1` FOREIGN KEY (`no_keluar`) REFERENCES `pengeluaran_obat_bhp` (`no_keluar`) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT `detail_pengeluaran_obat_bhp_ibfk_2` FOREIGN KEY (`kode_sat`) REFERENCES `kodesatuan` (`kode_sat`) ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT `detail_pengeluaran_obat_bhp_ibfk_3` FOREIGN KEY (`kode_brng`) REFERENCES `databarang` (`kode_brng`) ON DELETE CASCADE ON UPDATE CASCADE,
+INDEX `kode_sat` (`kode_sat`) USING BTREE ,
+INDEX `kode_brng` (`kode_brng`) USING BTREE ,
+INDEX `jumlah` (`jumlah`) USING BTREE ,
+INDEX `harga_beli` (`harga_beli`) USING BTREE ,
+INDEX `total` (`total`) USING BTREE ,
+INDEX `no_keluar` (`no_keluar`) USING BTREE 
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+CREATE INDEX `menejemen` ON `detail_periksa_lab`(`menejemen`) USING BTREE ;
+CREATE INDEX `kso` ON `detail_periksa_lab`(`kso`) USING BTREE ;
+CREATE INDEX `bagian_rs` ON `detail_periksa_lab`(`bagian_rs`) USING BTREE ;
+CREATE INDEX `bhp` ON `detail_periksa_lab`(`bhp`) USING BTREE ;
+CREATE INDEX `bagian_perujuk` ON `detail_periksa_lab`(`bagian_perujuk`) USING BTREE ;
+CREATE INDEX `bagian_dokter` ON `detail_periksa_lab`(`bagian_dokter`) USING BTREE ;
+CREATE INDEX `bagian_laborat` ON `detail_periksa_lab`(`bagian_laborat`) USING BTREE ;
+CREATE TABLE `detail_permintaan_lab` (
+`no_rawat`  varchar(17) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`kd_jenis_prw`  varchar(15) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`tgl_permintaan`  date NOT NULL ,
+`jam_permintaan`  time NOT NULL ,
+`tgl_bayar`  date NULL DEFAULT NULL ,
+`jam_bayar`  time NULL DEFAULT NULL ,
+`tgl_sampel`  date NOT NULL ,
+`jam_sampel`  time NOT NULL ,
+`tgl_hasil`  date NOT NULL ,
+`jam_hasil`  time NOT NULL ,
+`id_template`  int(11) NOT NULL ,
+`dokter_perujuk`  varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+PRIMARY KEY (`no_rawat`, `kd_jenis_prw`, `tgl_permintaan`, `jam_permintaan`),
+CONSTRAINT `detail_permintaan_lab_ibfk_1` FOREIGN KEY (`no_rawat`) REFERENCES `reg_periksa` (`no_rawat`) ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT `detail_permintaan_lab_ibfk_2` FOREIGN KEY (`kd_jenis_prw`) REFERENCES `jns_perawatan_lab` (`kd_jenis_prw`) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT `detail_permintaan_lab_ibfk_3` FOREIGN KEY (`id_template`) REFERENCES `template_laboratorium` (`id_template`) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT `detail_permintaan_lab_ibfk_4` FOREIGN KEY (`dokter_perujuk`) REFERENCES `dokter` (`kd_dokter`) ON DELETE CASCADE ON UPDATE CASCADE,
+INDEX `id_template` (`id_template`) USING BTREE ,
+INDEX `kd_jenis_prw` (`kd_jenis_prw`) USING BTREE ,
+INDEX `dokter_perujuk` (`dokter_perujuk`) USING BTREE 
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+CREATE TABLE `detail_permintaan_medis` (
+`no_permintaan`  varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`kode_brng`  varchar(15) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`kode_sat`  char(4) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`jumlah`  double NULL DEFAULT NULL ,
+`keterangan`  varchar(150) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+CONSTRAINT `detail_permintaan_medis_ibfk_1` FOREIGN KEY (`no_permintaan`) REFERENCES `permintaan_medis` (`no_permintaan`) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT `detail_permintaan_medis_ibfk_2` FOREIGN KEY (`kode_brng`) REFERENCES `databarang` (`kode_brng`) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT `detail_permintaan_medis_ibfk_3` FOREIGN KEY (`kode_sat`) REFERENCES `kodesatuan` (`kode_sat`) ON DELETE CASCADE ON UPDATE CASCADE,
+INDEX `no_permintaan` (`no_permintaan`) USING BTREE ,
+INDEX `kode_brng` (`kode_brng`) USING BTREE ,
+INDEX `kode_sat` (`kode_sat`) USING BTREE 
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+CREATE TABLE `detail_permintaan_non_medis` (
+`no_permintaan`  varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`kode_brng`  varchar(15) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`kode_sat`  char(4) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`jumlah`  double NULL DEFAULT NULL ,
+`keterangan`  varchar(150) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+CONSTRAINT `detail_permintaan_non_medis_ibfk_1` FOREIGN KEY (`no_permintaan`) REFERENCES `permintaan_non_medis` (`no_permintaan`) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT `detail_permintaan_non_medis_ibfk_2` FOREIGN KEY (`kode_brng`) REFERENCES `ipsrsbarang` (`kode_brng`) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT `detail_permintaan_non_medis_ibfk_3` FOREIGN KEY (`kode_sat`) REFERENCES `kodesatuan` (`kode_sat`) ON DELETE CASCADE ON UPDATE CASCADE,
+INDEX `no_permintaan` (`no_permintaan`) USING BTREE ,
+INDEX `kode_brng` (`kode_brng`) USING BTREE ,
+INDEX `kode_sat` (`kode_sat`) USING BTREE 
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+CREATE TABLE `detail_surat_pemesanan_medis` (
+`no_pemesanan`  varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`kode_brng`  varchar(15) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT '' ,
+`kode_sat`  char(4) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`jumlah`  double NULL DEFAULT NULL ,
+`h_pesan`  double NULL DEFAULT NULL ,
+`subtotal`  double NULL DEFAULT NULL ,
+`dis`  double NOT NULL ,
+`besardis`  double NOT NULL ,
+`total`  double NOT NULL ,
+`jumlah2`  double NULL DEFAULT NULL ,
+CONSTRAINT `detail_surat_pemesanan_medis_ibfk_1` FOREIGN KEY (`kode_brng`) REFERENCES `databarang` (`kode_brng`) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT `detail_surat_pemesanan_medis_ibfk_2` FOREIGN KEY (`kode_sat`) REFERENCES `kodesatuan` (`kode_sat`) ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT `detail_surat_pemesanan_medis_ibfk_3` FOREIGN KEY (`no_pemesanan`) REFERENCES `surat_pemesanan_medis` (`no_pemesanan`) ON DELETE CASCADE ON UPDATE CASCADE,
+INDEX `kode_brng` (`kode_brng`) USING BTREE ,
+INDEX `kode_sat` (`kode_sat`) USING BTREE ,
+INDEX `jumlah` (`jumlah`) USING BTREE ,
+INDEX `h_pesan` (`h_pesan`) USING BTREE ,
+INDEX `subtotal` (`subtotal`) USING BTREE ,
+INDEX `dis` (`dis`) USING BTREE ,
+INDEX `besardis` (`besardis`) USING BTREE ,
+INDEX `total` (`total`) USING BTREE ,
+INDEX `no_pemesanan` (`no_pemesanan`) USING BTREE 
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+CREATE TABLE `detail_surat_pemesanan_non_medis` (
+`no_pemesanan`  varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`kode_brng`  varchar(15) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT '' ,
+`kode_sat`  char(4) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`jumlah`  double NULL DEFAULT NULL ,
+`h_pesan`  double NULL DEFAULT NULL ,
+`subtotal`  double NULL DEFAULT NULL ,
+`dis`  double NOT NULL ,
+`besardis`  double NOT NULL ,
+`total`  double NOT NULL ,
+CONSTRAINT `detail_surat_pemesanan_non_medis_ibfk_1` FOREIGN KEY (`kode_brng`) REFERENCES `ipsrsbarang` (`kode_brng`) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT `detail_surat_pemesanan_non_medis_ibfk_2` FOREIGN KEY (`kode_sat`) REFERENCES `kodesatuan` (`kode_sat`) ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT `detail_surat_pemesanan_non_medis_ibfk_3` FOREIGN KEY (`no_pemesanan`) REFERENCES `surat_pemesanan_non_medis` (`no_pemesanan`) ON DELETE CASCADE ON UPDATE CASCADE,
+INDEX `kode_brng` (`kode_brng`) USING BTREE ,
+INDEX `kode_sat` (`kode_sat`) USING BTREE ,
+INDEX `jumlah` (`jumlah`) USING BTREE ,
+INDEX `h_pesan` (`h_pesan`) USING BTREE ,
+INDEX `subtotal` (`subtotal`) USING BTREE ,
+INDEX `dis` (`dis`) USING BTREE ,
+INDEX `besardis` (`besardis`) USING BTREE ,
+INDEX `total` (`total`) USING BTREE ,
+INDEX `no_pemesanan` (`no_pemesanan`) USING BTREE 
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+ALTER TABLE `detailbeli` ADD COLUMN `kadaluarsa`  date NULL DEFAULT NULL AFTER `jumlah2`;
+ALTER TABLE `detailbeli` DROP PRIMARY KEY;
+ALTER TABLE `detailjual` ADD COLUMN `embalase`  double NOT NULL AFTER `tambahan`;
+ALTER TABLE `detailjual` ADD COLUMN `tuslah`  double NOT NULL AFTER `embalase`;
+ALTER TABLE `detailjual` ADD COLUMN `aturan_pakai`  varchar(150) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `tuslah`;
+ALTER TABLE `detailjual` DROP PRIMARY KEY;
+ALTER TABLE `detailpesan` ADD COLUMN `kadaluarsa`  date NULL DEFAULT NULL AFTER `jumlah2`;
+ALTER TABLE `detailpesan` DROP PRIMARY KEY;
+ALTER TABLE `detailpiutang` DROP PRIMARY KEY;
+ALTER TABLE `detreturpiutang` DROP PRIMARY KEY;
+ALTER TABLE `detreturbeli` DROP PRIMARY KEY;
+ALTER TABLE `diagnosa_pasien` ADD COLUMN `status_penyakit`  enum('Lama','Baru') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `prioritas`;
+CREATE INDEX `kd_dokter` ON `dokter`(`kd_dokter`) USING BTREE ;
+CREATE INDEX `status` ON `dokter`(`status`) USING BTREE ;
+CREATE TABLE `gambar_radiologi` (
+`no_rawat`  varchar(17) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`tgl_periksa`  date NOT NULL ,
+`jam`  time NOT NULL ,
+`lokasi_gambar`  varchar(500) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+PRIMARY KEY (`no_rawat`, `tgl_periksa`, `jam`, `lokasi_gambar`),
+CONSTRAINT `gambar_radiologi_ibfk_1` FOREIGN KEY (`no_rawat`) REFERENCES `reg_periksa` (`no_rawat`) ON DELETE CASCADE ON UPDATE CASCADE
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+CREATE TABLE `golongan_barang` (
+`kode`  char(4) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`nama`  varchar(30) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+PRIMARY KEY (`kode`)
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+CREATE TABLE `inacbg_data_terkirim2` (
+`no_sep`  varchar(40) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`nik`  varchar(30) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+PRIMARY KEY (`no_sep`),
+CONSTRAINT `inacbg_data_terkirim2_ibfk_1` FOREIGN KEY (`no_sep`) REFERENCES `inacbg_klaim_baru2` (`no_sep`) ON DELETE CASCADE ON UPDATE CASCADE
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+CREATE TABLE `inacbg_grouping_stage12` (
+`no_sep`  varchar(40) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`code_cbg`  varchar(10) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`deskripsi`  varchar(200) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`tarif`  double NULL DEFAULT NULL ,
+PRIMARY KEY (`no_sep`),
+CONSTRAINT `inacbg_grouping_stage12_ibfk_1` FOREIGN KEY (`no_sep`) REFERENCES `inacbg_klaim_baru2` (`no_sep`) ON DELETE CASCADE ON UPDATE CASCADE
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+CREATE TABLE `inacbg_klaim_baru2` (
+`no_rawat`  varchar(17) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`no_sep`  varchar(40) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT '' ,
+`patient_id`  int(11) NULL DEFAULT NULL ,
+`admission_id`  int(11) NULL DEFAULT NULL ,
+`hospital_admission_id`  int(11) NULL DEFAULT NULL ,
+PRIMARY KEY (`no_rawat`),
+CONSTRAINT `inacbg_klaim_baru2_ibfk_1` FOREIGN KEY (`no_rawat`) REFERENCES `reg_periksa` (`no_rawat`) ON DELETE CASCADE ON UPDATE CASCADE,
+UNIQUE INDEX `no_sep` (`no_sep`) USING BTREE 
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+CREATE INDEX `nama_industri` ON `industrifarmasi`(`nama_industri`) USING BTREE ;
+CREATE INDEX `alamat` ON `industrifarmasi`(`alamat`) USING BTREE ;
+CREATE INDEX `kota` ON `industrifarmasi`(`kota`) USING BTREE ;
+CREATE INDEX `no_telp` ON `industrifarmasi`(`no_telp`) USING BTREE ;
+ALTER TABLE `ipsrsbarang` ADD COLUMN `status`  enum('0','1') CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `harga`;
+ALTER TABLE `ipsrsdetailbeli` DROP FOREIGN KEY `ipsrsdetailbeli_ibfk_4`;
+ALTER TABLE `ipsrsdetailbeli` ADD CONSTRAINT `ipsrsdetailbeli_ibfk_4` FOREIGN KEY (`kode_brng`) REFERENCES `ipsrsbarang` (`kode_brng`) ON DELETE CASCADE ON UPDATE CASCADE;
+CREATE INDEX `no_faktur` ON `ipsrsdetailbeli`(`no_faktur`) USING BTREE ;
+ALTER TABLE `ipsrsdetailbeli` DROP PRIMARY KEY;
+ALTER TABLE `ipsrsdetailpengeluaran` DROP FOREIGN KEY `ipsrsdetailpengeluaran_ibfk_4`;
+ALTER TABLE `ipsrsdetailpengeluaran` MODIFY COLUMN `no_keluar`  varchar(15) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL FIRST ;
+ALTER TABLE `ipsrsdetailpengeluaran` ADD CONSTRAINT `ipsrsdetailpengeluaran_ibfk_4` FOREIGN KEY (`kode_brng`) REFERENCES `ipsrsbarang` (`kode_brng`) ON DELETE CASCADE ON UPDATE CASCADE;
+CREATE INDEX `no_keluar` ON `ipsrsdetailpengeluaran`(`no_keluar`) USING BTREE ;
+ALTER TABLE `ipsrspembelian` ADD COLUMN `meterai`  double NULL DEFAULT NULL AFTER `ppn`;
+ALTER TABLE `ipsrspengeluaran` MODIFY COLUMN `no_keluar`  varchar(15) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL FIRST ;
+ALTER TABLE `ipsrsdetailpengeluaran` DROP PRIMARY KEY;
+CREATE INDEX `h1` ON `jadwal_pegawai`(`h1`) USING BTREE ;
+CREATE INDEX `h2` ON `jadwal_pegawai`(`h2`) USING BTREE ;
+CREATE INDEX `h3` ON `jadwal_pegawai`(`h3`) USING BTREE ;
+CREATE INDEX `h4` ON `jadwal_pegawai`(`h4`) USING BTREE ;
+CREATE INDEX `h30` ON `jadwal_pegawai`(`h30`) USING BTREE ;
+CREATE INDEX `h31` ON `jadwal_pegawai`(`h31`) USING BTREE ;
+CREATE INDEX `h29` ON `jadwal_pegawai`(`h29`) USING BTREE ;
+CREATE INDEX `h28` ON `jadwal_pegawai`(`h28`) USING BTREE ;
+CREATE INDEX `h18` ON `jadwal_pegawai`(`h18`) USING BTREE ;
+CREATE INDEX `h9` ON `jadwal_pegawai`(`h9`) USING BTREE ;
+CREATE INDEX `kso` ON `jns_perawatan`(`kso`) USING BTREE ;
+CREATE INDEX `menejemen` ON `jns_perawatan`(`menejemen`) USING BTREE ;
+CREATE INDEX `status` ON `jns_perawatan`(`status`) USING BTREE ;
+CREATE INDEX `total_byrdrpr` ON `jns_perawatan`(`total_byrdrpr`) USING BTREE ;
+CREATE INDEX `bhp` ON `jns_perawatan`(`bhp`) USING BTREE ;
+ALTER TABLE `jns_perawatan_inap` ADD COLUMN `kelas`  enum('-','Kelas 1','Kelas 2','Kelas 3','Kelas Utama','Kelas VIP','Kelas VVIP') CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `status`;
+CREATE INDEX `bhp` ON `jns_perawatan_inap`(`bhp`) USING BTREE ;
+CREATE INDEX `kso` ON `jns_perawatan_inap`(`kso`) USING BTREE ;
+CREATE INDEX `menejemen` ON `jns_perawatan_inap`(`menejemen`) USING BTREE ;
+CREATE INDEX `status` ON `jns_perawatan_inap`(`status`) USING BTREE ;
+CREATE INDEX `total_byrdrpr` ON `jns_perawatan_inap`(`total_byrdrpr`) USING BTREE ;
+ALTER TABLE `jns_perawatan_lab` ADD COLUMN `kelas`  enum('-','Rawat Jalan','Kelas 1','Kelas 2','Kelas 3','Kelas Utama','Kelas VIP','Kelas VVIP') CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `status`;
+CREATE INDEX `bhp` ON `jns_perawatan_lab`(`bhp`) USING BTREE ;
+CREATE INDEX `kso` ON `jns_perawatan_lab`(`kso`) USING BTREE ;
+CREATE INDEX `menejemen` ON `jns_perawatan_lab`(`menejemen`) USING BTREE ;
+CREATE INDEX `status` ON `jns_perawatan_lab`(`status`) USING BTREE ;
+ALTER TABLE `jns_perawatan_radiologi` ADD COLUMN `kelas`  enum('-','Rawat Jalan','Kelas 1','Kelas 2','Kelas 3','Kelas Utama','Kelas VIP','Kelas VVIP') CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `status`;
+CREATE INDEX `bhp` ON `jns_perawatan_radiologi`(`bhp`) USING BTREE ;
+CREATE INDEX `kso` ON `jns_perawatan_radiologi`(`kso`) USING BTREE ;
+CREATE INDEX `menejemen` ON `jns_perawatan_radiologi`(`menejemen`) USING BTREE ;
+CREATE INDEX `status` ON `jns_perawatan_radiologi`(`status`) USING BTREE ;
+ALTER TABLE `jurnal` MODIFY COLUMN `keterangan`  varchar(350) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `jenis`;
+CREATE INDEX `statusdata` ON `kamar`(`statusdata`) USING BTREE ;
+ALTER TABLE `kamar_inap` MODIFY COLUMN `stts_pulang`  enum('Sehat','Rujuk','APS','+','Meninggal','Sembuh','Membaik','Pulang Paksa','-','Pindah Kamar','Status Belum Lengkap','Atas Persetujuan Dokter','Atas Permintaan Sendiri','Lain-lain') CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `ttl_biaya`;
+CREATE INDEX `trf_kamar` ON `kamar_inap`(`trf_kamar`) USING BTREE ;
+CREATE TABLE `kategori_barang` (
+`kode`  char(4) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`nama`  varchar(30) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+PRIMARY KEY (`kode`)
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+CREATE TABLE `master_berkas_digital` (
+`kode`  varchar(10) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`nama`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+PRIMARY KEY (`kode`)
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+CREATE TABLE `metode_racik` (
+`kd_racik`  varchar(3) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`nm_racik`  varchar(30) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+PRIMARY KEY (`kd_racik`)
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+ALTER TABLE `mutasibarang` DROP PRIMARY KEY;
+ALTER TABLE `mutasibarang` ADD PRIMARY KEY (`kode_brng`, `kd_bangsaldari`, `kd_bangsalke`, `tanggal`);
+CREATE INDEX `tanggal` ON `nota_inap`(`tanggal`) USING BTREE ;
+CREATE INDEX `jam` ON `nota_inap`(`jam`) USING BTREE ;
+CREATE INDEX `Uang_Muka` ON `nota_inap`(`Uang_Muka`) USING BTREE ;
+CREATE INDEX `tanggal` ON `nota_jalan`(`tanggal`) USING BTREE ;
+CREATE INDEX `jam` ON `nota_jalan`(`jam`) USING BTREE ;
+CREATE INDEX `Jasa_Medik_Dokter_Tindakan_Ralan` ON `nota_jalan`(`Jasa_Medik_Dokter_Tindakan_Ralan`) USING BTREE ;
+CREATE INDEX `Jasa_Medik_Paramedis_Tindakan_Ralan` ON `nota_jalan`(`Jasa_Medik_Paramedis_Tindakan_Ralan`) USING BTREE ;
+CREATE TABLE `obat_racikan` (
+`tgl_perawatan`  date NOT NULL ,
+`jam`  time NOT NULL ,
+`no_rawat`  varchar(17) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`no_racik`  varchar(2) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`nama_racik`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`kd_racik`  varchar(3) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`jml_dr`  int(11) NOT NULL ,
+`aturan_pakai`  varchar(150) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`keterangan`  varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+PRIMARY KEY (`tgl_perawatan`, `jam`, `no_rawat`, `no_racik`),
+CONSTRAINT `obat_racikan_ibfk_1` FOREIGN KEY (`no_rawat`) REFERENCES `reg_periksa` (`no_rawat`) ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT `obat_racikan_ibfk_2` FOREIGN KEY (`kd_racik`) REFERENCES `metode_racik` (`kd_racik`) ON DELETE RESTRICT ON UPDATE CASCADE,
+INDEX `kd_racik` (`kd_racik`) USING BTREE ,
+INDEX `no_rawat` (`no_rawat`) USING BTREE ,
+INDEX `no_racik` (`no_racik`) USING BTREE 
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+ALTER TABLE `operasi` DROP FOREIGN KEY `operasi_ibfk_52`;
+ALTER TABLE `operasi` ADD CONSTRAINT `operasi_ibfk_52` FOREIGN KEY (`asisten_operator3`) REFERENCES `petugas` (`nip`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `operasi` DROP FOREIGN KEY `operasi_ibfk_53`;
+ALTER TABLE `operasi` ADD CONSTRAINT `operasi_ibfk_53` FOREIGN KEY (`asisten_anestesi2`) REFERENCES `petugas` (`nip`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `operasi` DROP FOREIGN KEY `operasi_ibfk_54`;
+ALTER TABLE `operasi` ADD CONSTRAINT `operasi_ibfk_54` FOREIGN KEY (`omloop4`) REFERENCES `petugas` (`nip`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `operasi` DROP FOREIGN KEY `operasi_ibfk_55`;
+ALTER TABLE `operasi` ADD CONSTRAINT `operasi_ibfk_55` FOREIGN KEY (`omloop5`) REFERENCES `petugas` (`nip`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `paket_operasi` ADD COLUMN `kelas`  enum('-','Rawat Jalan','Kelas 1','Kelas 2','Kelas 3','Kelas Utama','Kelas VIP','Kelas VVIP') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `status`;
+CREATE INDEX `asisten_anestesi2` ON `paket_operasi`(`asisten_anestesi2`) USING BTREE ;
+CREATE INDEX `omloop2` ON `paket_operasi`(`omloop2`) USING BTREE ;
+CREATE INDEX `omloop3` ON `paket_operasi`(`omloop3`) USING BTREE ;
+CREATE INDEX `omloop4` ON `paket_operasi`(`omloop4`) USING BTREE ;
+CREATE INDEX `omloop5` ON `paket_operasi`(`omloop5`) USING BTREE ;
+CREATE INDEX `status` ON `paket_operasi`(`status`) USING BTREE ;
+CREATE INDEX `kategori` ON `paket_operasi`(`kategori`) USING BTREE ;
+CREATE INDEX `bidan2` ON `paket_operasi`(`bidan2`) USING BTREE ;
+CREATE INDEX `bidan3` ON `paket_operasi`(`bidan3`) USING BTREE ;
+CREATE INDEX `asisten_operator3_2` ON `paket_operasi`(`asisten_operator3`) USING BTREE ;
+ALTER TABLE `pasien` MODIFY COLUMN `pekerjaan`  varchar(35) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `gol_darah`;
+ALTER TABLE `pasien` MODIFY COLUMN `pnd`  enum('TS','TK','SD','SMP','SMA','SLTA/SEDERAJAT','D1','D2','D3','D4','S1','S2','S3','-') CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `umur`;
+ALTER TABLE `pasien` MODIFY COLUMN `pekerjaanpj`  varchar(35) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `kd_kab`;
+CREATE INDEX `no_peserta` ON `pasien`(`no_peserta`) USING BTREE ;
+CREATE INDEX `pekerjaanpj` ON `pasien`(`pekerjaanpj`) USING BTREE ;
+CREATE INDEX `alamatpj` ON `pasien`(`alamatpj`) USING BTREE ;
+CREATE INDEX `namakeluarga` ON `pasien`(`namakeluarga`) USING BTREE ;
+CREATE INDEX `kelurahanpj` ON `pasien`(`kelurahanpj`) USING BTREE ;
+CREATE INDEX `kecamatanpj` ON `pasien`(`kecamatanpj`) USING BTREE ;
+CREATE INDEX `kabupatenpj` ON `pasien`(`kabupatenpj`) USING BTREE ;
+ALTER TABLE `pasien_bayi` MODIFY COLUMN `proses_lahir`  varchar(60) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `lingkar_kepala`;
+ALTER TABLE `pasien_bayi` ADD COLUMN `diagnosa`  varchar(60) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `keterangan`;
+ALTER TABLE `pasien_bayi` ADD COLUMN `penyulit_kehamilan`  varchar(60) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `diagnosa`;
+ALTER TABLE `pasien_bayi` ADD COLUMN `ketuban`  varchar(60) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `penyulit_kehamilan`;
+ALTER TABLE `pasien_bayi` ADD COLUMN `lingkar_perut`  varchar(10) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `ketuban`;
+ALTER TABLE `pasien_bayi` ADD COLUMN `lingkar_dada`  varchar(10) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `lingkar_perut`;
+ALTER TABLE `pasien_bayi` ADD COLUMN `penolong`  varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `lingkar_dada`;
+ALTER TABLE `pasien_bayi` ADD COLUMN `no_skl`  varchar(30) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `penolong`;
+ALTER TABLE `pasien_bayi` ADD CONSTRAINT `pasien_bayi_ibfk_2` FOREIGN KEY (`penolong`) REFERENCES `pegawai` (`nik`) ON DELETE CASCADE ON UPDATE CASCADE;
+CREATE UNIQUE INDEX `no_skl` ON `pasien_bayi`(`no_skl`) USING BTREE ;
+CREATE INDEX `penolong` ON `pasien_bayi`(`penolong`) USING BTREE ;
+ALTER TABLE `pegawai` ADD COLUMN `photo`  varchar(500) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `dankes`;
+CREATE INDEX `nama` ON `pegawai`(`nama`) USING BTREE ;
+CREATE INDEX `jbtn` ON `pegawai`(`jbtn`) USING BTREE ;
+CREATE INDEX `npwp` ON `pegawai`(`npwp`) USING BTREE ;
+CREATE INDEX `dankes` ON `pegawai`(`dankes`) USING BTREE ;
+CREATE INDEX `cuti_diambil` ON `pegawai`(`cuti_diambil`) USING BTREE ;
+CREATE INDEX `mulai_kontrak` ON `pegawai`(`mulai_kontrak`) USING BTREE ;
+CREATE INDEX `stts_aktif` ON `pegawai`(`stts_aktif`) USING BTREE ;
+CREATE INDEX `tmp_lahir` ON `pegawai`(`tmp_lahir`) USING BTREE ;
+CREATE INDEX `alamat` ON `pegawai`(`alamat`) USING BTREE ;
+CREATE INDEX `mulai_kerja` ON `pegawai`(`mulai_kerja`) USING BTREE ;
+CREATE INDEX `gapok` ON `pegawai`(`gapok`) USING BTREE ;
+CREATE INDEX `kota` ON `pegawai`(`kota`) USING BTREE ;
+CREATE INDEX `pengurang` ON `pegawai`(`pengurang`) USING BTREE ;
+CREATE INDEX `indek` ON `pegawai`(`indek`) USING BTREE ;
+CREATE INDEX `jk` ON `pegawai`(`jk`) USING BTREE ;
+CREATE INDEX `ms_kerja` ON `pegawai`(`ms_kerja`) USING BTREE ;
+CREATE INDEX `tgl_lahir` ON `pegawai`(`tgl_lahir`) USING BTREE ;
+CREATE INDEX `rekening` ON `pegawai`(`rekening`) USING BTREE ;
+CREATE INDEX `wajibmasuk` ON `pegawai`(`wajibmasuk`) USING BTREE ;
+ALTER TABLE `pemasukan_lain` DROP PRIMARY KEY;
+ALTER TABLE `pemasukan_lain` ADD COLUMN `no_masuk`  varchar(15) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL FIRST ;
+ALTER TABLE `pemasukan_lain` ADD PRIMARY KEY (`no_masuk`);
+CREATE TABLE `pemeriksaan_obstetri_ralan` (
+`no_rawat`  varchar(17) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`tgl_perawatan`  date NOT NULL ,
+`jam_rawat`  time NOT NULL ,
+`tinggi_uteri`  varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`janin`  enum('Tunggal','Gemelli','-') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`letak`  varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`panggul`  enum('-','5/5','4/5','3/5','2/5','1/5') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`denyut`  varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`kontraksi`  enum('+','-') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`kualitas_mnt`  varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`kualitas_dtk`  varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`fluksus`  enum('+','-') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`albus`  enum('+','-') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`vulva`  varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`portio`  varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`dalam`  enum('Kenyal','Lunak') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`tebal`  varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`arah`  enum('depan','axial','belakang') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`pembukaan`  varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`penurunan`  varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`denominator`  varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`ketuban`  enum('-','+') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`feto`  enum('Normal','Susp.CPD-FPD','CPD-FPD') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+PRIMARY KEY (`no_rawat`, `tgl_perawatan`, `jam_rawat`),
+CONSTRAINT `pemeriksaan_obstetri_ralan_ibfk_1` FOREIGN KEY (`no_rawat`) REFERENCES `reg_periksa` (`no_rawat`) ON DELETE RESTRICT ON UPDATE CASCADE
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+CREATE TABLE `pemeriksaan_obstetri_ranap` (
+`no_rawat`  varchar(17) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`tgl_perawatan`  date NOT NULL ,
+`jam_rawat`  time NOT NULL ,
+`tinggi_uteri`  varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`janin`  enum('Tunggal','Gemelli','-') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`letak`  varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`panggul`  enum('-','5/5','4/5','3/5','2/5','1/5') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`denyut`  varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`kontraksi`  enum('+','-') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`kualitas_mnt`  varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`kualitas_dtk`  varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`fluksus`  enum('+','-') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`albus`  enum('+','-') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`vulva`  varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`portio`  varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`dalam`  enum('Kenyal','Lunak') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`tebal`  varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`arah`  enum('depan','axial','belakang') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`pembukaan`  varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`penurunan`  varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`denominator`  varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`ketuban`  enum('-','+') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`feto`  enum('Normal','Susp.CPD-FPD','CPD-FPD') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+PRIMARY KEY (`no_rawat`, `tgl_perawatan`, `jam_rawat`),
+CONSTRAINT `pemeriksaan_obstetri_ranap_ibfk_1` FOREIGN KEY (`no_rawat`) REFERENCES `reg_periksa` (`no_rawat`) ON DELETE RESTRICT ON UPDATE CASCADE
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+ALTER TABLE `pemeriksaan_ralan` DROP PRIMARY KEY;
+ALTER TABLE `pemeriksaan_ralan` ADD COLUMN `imun_ke`  enum('-','1','2','3','4','5','6','7','8','10','11','12','13') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `alergi`;
+ALTER TABLE `pemeriksaan_ralan` ADD COLUMN `rtl`  varchar(400) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `imun_ke`;
+ALTER TABLE `pemesanan` ADD COLUMN `meterai`  double NULL DEFAULT NULL AFTER `ppn`;
+CREATE TABLE `pengaduan` (
+`id`  int(11) NOT NULL AUTO_INCREMENT ,
+`date_time`  datetime NOT NULL ,
+`username`  varchar(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
+`message`  varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
+PRIMARY KEY (`id`)
+)
+ENGINE=MyISAM
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+CHECKSUM=0
+ROW_FORMAT=Dynamic
+DELAY_KEY_WRITE=0
+;
+ALTER TABLE `pengeluaran_harian` MODIFY COLUMN `keterangan`  varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT '' AFTER `nip`;
+CREATE TABLE `pengeluaran_obat_bhp` (
+`no_keluar`  varchar(15) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`tanggal`  date NOT NULL ,
+`nip`  varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`keterangan`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`kd_bangsal`  char(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+PRIMARY KEY (`no_keluar`),
+CONSTRAINT `pengeluaran_obat_bhp_ibfk_1` FOREIGN KEY (`nip`) REFERENCES `petugas` (`nip`) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT `pengeluaran_obat_bhp_ibfk_2` FOREIGN KEY (`kd_bangsal`) REFERENCES `bangsal` (`kd_bangsal`) ON DELETE CASCADE ON UPDATE CASCADE,
+INDEX `nip` (`nip`) USING BTREE ,
+INDEX `tanggal` (`tanggal`) USING BTREE ,
+INDEX `keterangan` (`keterangan`) USING BTREE ,
+INDEX `kd_bangsal` (`kd_bangsal`) USING BTREE 
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+ALTER TABLE `penjab` MODIFY COLUMN `png_jawab`  varchar(30) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `kd_pj`;
+ALTER TABLE `penjualan` ADD COLUMN `nama_bayar`  varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `kd_rek`;
+ALTER TABLE `penjualan` ADD CONSTRAINT `penjualan_ibfk_13` FOREIGN KEY (`nama_bayar`) REFERENCES `akun_bayar` (`nama_bayar`) ON DELETE RESTRICT ON UPDATE CASCADE;
+CREATE INDEX `nama_bayar` ON `penjualan`(`nama_bayar`) USING BTREE ;
+CREATE TABLE `permintaan_jl_dr` (
+`no_rawat`  varchar(17) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT '' ,
+`kd_jenis_prw`  varchar(15) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`kd_dokter`  varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`tgl_permintaan`  date NULL DEFAULT NULL ,
+`jam_permintaan`  time NULL DEFAULT NULL ,
+`tgl_bayar`  date NULL DEFAULT NULL ,
+`jam_bayar`  time NULL DEFAULT NULL ,
+CONSTRAINT `permintaan_jl_dr_ibfk_1` FOREIGN KEY (`kd_jenis_prw`) REFERENCES `jns_perawatan` (`kd_jenis_prw`) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT `permintaan_jl_dr_ibfk_2` FOREIGN KEY (`kd_dokter`) REFERENCES `dokter` (`kd_dokter`) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT `permintaan_jl_dr_ibfk_3` FOREIGN KEY (`no_rawat`) REFERENCES `reg_periksa` (`no_rawat`) ON DELETE CASCADE ON UPDATE CASCADE,
+INDEX `no_rawat` (`no_rawat`) USING BTREE ,
+INDEX `kd_jenis_prw` (`kd_jenis_prw`) USING BTREE ,
+INDEX `kd_dokter` (`kd_dokter`) USING BTREE 
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+CREATE TABLE `permintaan_jl_drpr` (
+`no_rawat`  varchar(17) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT '' ,
+`kd_jenis_prw`  varchar(15) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`kd_dokter`  varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`nip`  varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`tgl_permintaan`  date NULL DEFAULT NULL ,
+`jam_permintaan`  time NULL DEFAULT NULL ,
+`tgl_bayar`  date NULL DEFAULT NULL ,
+`jam_bayar`  time NULL DEFAULT NULL ,
+CONSTRAINT `permintaan_jl_drpr_ibfk_1` FOREIGN KEY (`no_rawat`) REFERENCES `reg_periksa` (`no_rawat`) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT `permintaan_jl_drpr_ibfk_2` FOREIGN KEY (`kd_jenis_prw`) REFERENCES `jns_perawatan` (`kd_jenis_prw`) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT `permintaan_jl_drpr_ibfk_3` FOREIGN KEY (`kd_dokter`) REFERENCES `dokter` (`kd_dokter`) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT `permintaan_jl_drpr_ibfk_4` FOREIGN KEY (`nip`) REFERENCES `petugas` (`nip`) ON DELETE CASCADE ON UPDATE CASCADE,
+INDEX `kd_jenis_prw` (`kd_jenis_prw`) USING BTREE ,
+INDEX `kd_dokter` (`kd_dokter`) USING BTREE ,
+INDEX `nip` (`nip`) USING BTREE ,
+INDEX `permintaan_jl_drpr_ibfk_1` (`no_rawat`) USING BTREE 
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+CREATE TABLE `permintaan_jl_pr` (
+`no_rawat`  varchar(17) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT '' ,
+`kd_jenis_prw`  varchar(15) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`nip`  varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT '' ,
+`tgl_permintaan`  date NULL DEFAULT NULL ,
+`jam_permintaan`  time NULL DEFAULT NULL ,
+`tgl_bayar`  date NULL DEFAULT NULL ,
+`jam_bayar`  time NULL DEFAULT NULL ,
+CONSTRAINT `permintaan_jl_pr_ibfk_1` FOREIGN KEY (`nip`) REFERENCES `petugas` (`nip`) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT `permintaan_jl_pr_ibfk_2` FOREIGN KEY (`no_rawat`) REFERENCES `reg_periksa` (`no_rawat`) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT `permintaan_jl_pr_ibfk_3` FOREIGN KEY (`kd_jenis_prw`) REFERENCES `jns_perawatan` (`kd_jenis_prw`) ON DELETE CASCADE ON UPDATE CASCADE,
+INDEX `no_rawat` (`no_rawat`) USING BTREE ,
+INDEX `kd_jenis_prw` (`kd_jenis_prw`) USING BTREE ,
+INDEX `nip` (`nip`) USING BTREE 
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+CREATE TABLE `permintaan_lab` (
+`no_rawat`  varchar(17) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`kd_jenis_prw`  varchar(15) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`tgl_permintaan`  date NOT NULL ,
+`jam_permintaan`  time NOT NULL ,
+`tgl_bayar`  date NULL DEFAULT NULL ,
+`jam_bayar`  time NULL DEFAULT NULL ,
+`tgl_sampel`  date NOT NULL ,
+`jam_sampel`  time NOT NULL ,
+`tgl_hasil`  date NOT NULL ,
+`jam_hasil`  time NOT NULL ,
+`dokter_perujuk`  varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+PRIMARY KEY (`no_rawat`, `kd_jenis_prw`, `tgl_permintaan`, `jam_permintaan`),
+CONSTRAINT `permintaan_lab_ibfk_1` FOREIGN KEY (`kd_jenis_prw`) REFERENCES `jns_perawatan_lab` (`kd_jenis_prw`) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT `permintaan_lab_ibfk_2` FOREIGN KEY (`dokter_perujuk`) REFERENCES `dokter` (`kd_dokter`) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT `permintaan_lab_ibfk_3` FOREIGN KEY (`no_rawat`) REFERENCES `reg_periksa` (`no_rawat`) ON DELETE CASCADE ON UPDATE CASCADE,
+INDEX `kd_jenis_prw` (`kd_jenis_prw`) USING BTREE ,
+INDEX `dokter_perujuk` (`dokter_perujuk`) USING BTREE 
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+CREATE TABLE `permintaan_medis` (
+`no_permintaan`  varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`kd_bangsal`  char(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`nip`  varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`tanggal`  date NULL DEFAULT NULL ,
+`status`  enum('Baru','Disetujui','Tidak Disetujui') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+PRIMARY KEY (`no_permintaan`),
+CONSTRAINT `permintaan_medis_ibfk_1` FOREIGN KEY (`kd_bangsal`) REFERENCES `bangsal` (`kd_bangsal`) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT `permintaan_medis_ibfk_2` FOREIGN KEY (`nip`) REFERENCES `pegawai` (`nik`) ON DELETE CASCADE ON UPDATE CASCADE,
+INDEX `kd_bangsal` (`kd_bangsal`) USING BTREE ,
+INDEX `permintaan_medis_ibfk_2` (`nip`) USING BTREE 
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+CREATE TABLE `permintaan_non_medis` (
+`no_permintaan`  varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`ruang`  varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`nip`  varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`tanggal`  date NULL DEFAULT NULL ,
+`status`  enum('Baru','Disetujui','Tidak Disetujui') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+PRIMARY KEY (`no_permintaan`),
+CONSTRAINT `permintaan_non_medis_ibfk_1` FOREIGN KEY (`nip`) REFERENCES `pegawai` (`nik`) ON DELETE CASCADE ON UPDATE CASCADE,
+INDEX `nip` (`nip`) USING BTREE 
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+CREATE TABLE `permintaan_obat` (
+`tgl_permintaan`  date NOT NULL ,
+`jam_permintaan`  time NOT NULL ,
+`no_rawat`  varchar(17) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`kode_brng`  varchar(15) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`tgl_bayar`  date NOT NULL ,
+`jam_bayar`  time NOT NULL ,
+PRIMARY KEY (`tgl_permintaan`, `jam_permintaan`, `no_rawat`, `kode_brng`),
+CONSTRAINT `permintaan_obat_ibfk_1` FOREIGN KEY (`no_rawat`) REFERENCES `reg_periksa` (`no_rawat`) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT `permintaan_obat_ibfk_2` FOREIGN KEY (`kode_brng`) REFERENCES `databarang` (`kode_brng`) ON DELETE CASCADE ON UPDATE CASCADE,
+INDEX `no_rawat` (`no_rawat`) USING BTREE ,
+INDEX `kode_brng` (`kode_brng`) USING BTREE 
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+CREATE TABLE `permintaan_radiologi` (
+`no_rawat`  varchar(17) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`kd_jenis_prw`  varchar(15) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`tgl_permintaan`  date NOT NULL ,
+`jam_permintaan`  time NOT NULL ,
+`tgl_bayar`  date NULL DEFAULT NULL ,
+`jam_bayar`  time NULL DEFAULT NULL ,
+`tgl_sampel`  date NOT NULL ,
+`jam_sampel`  time NOT NULL ,
+`tgl_hasil`  date NOT NULL ,
+`jam_hasil`  time NOT NULL ,
+`dokter_perujuk`  varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+PRIMARY KEY (`no_rawat`, `kd_jenis_prw`, `tgl_permintaan`, `jam_permintaan`),
+CONSTRAINT `permintaan_radiologi_ibfk_1` FOREIGN KEY (`no_rawat`) REFERENCES `reg_periksa` (`no_rawat`) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT `permintaan_radiologi_ibfk_2` FOREIGN KEY (`kd_jenis_prw`) REFERENCES `jns_perawatan_radiologi` (`kd_jenis_prw`) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT `permintaan_radiologi_ibfk_3` FOREIGN KEY (`dokter_perujuk`) REFERENCES `dokter` (`kd_dokter`) ON DELETE CASCADE ON UPDATE CASCADE,
+INDEX `kd_jenis_prw` (`kd_jenis_prw`) USING BTREE ,
+INDEX `dokter_perujuk` (`dokter_perujuk`) USING BTREE 
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+CREATE TABLE `permintaan_registrasi` (
+`no_rawat`  varchar(17) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`kd_poli`  char(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+PRIMARY KEY (`no_rawat`, `kd_poli`),
+CONSTRAINT `permintaan_registrasi_ibfk_1` FOREIGN KEY (`no_rawat`) REFERENCES `reg_periksa` (`no_rawat`) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT `permintaan_registrasi_ibfk_2` FOREIGN KEY (`kd_poli`) REFERENCES `poliklinik` (`kd_poli`) ON DELETE CASCADE ON UPDATE CASCADE,
+INDEX `no_rawat` (`no_rawat`) USING BTREE ,
+INDEX `kd_poli` (`kd_poli`) USING BTREE 
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+CREATE TABLE `perusahaan_pasien` (
+`kode_perusahaan`  varchar(8) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`nama_perusahaan`  varchar(70) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`alamat`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`kota`  varchar(40) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`no_telp`  varchar(27) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+PRIMARY KEY (`kode_perusahaan`)
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+CREATE INDEX `nip` ON `petugas`(`nip`) USING BTREE ;
+CREATE INDEX `tmp_lahir` ON `petugas`(`tmp_lahir`) USING BTREE ;
+CREATE INDEX `tgl_lahir` ON `petugas`(`tgl_lahir`) USING BTREE ;
+CREATE INDEX `agama` ON `petugas`(`agama`) USING BTREE ;
+CREATE INDEX `stts_nikah` ON `petugas`(`stts_nikah`) USING BTREE ;
+CREATE INDEX `alamat` ON `petugas`(`alamat`) USING BTREE ;
+ALTER TABLE `reg_periksa` MODIFY COLUMN `stts`  enum('Belum','Sudah','Batal','Berkas Diterima','Dirujuk','Meninggal','Dirawat') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `biaya_reg`;
+ALTER TABLE `reg_periksa` ADD COLUMN `status_bayar`  enum('Sudah Bayar','Belum Bayar') CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `sttsumur`;
+ALTER TABLE `reg_periksa` ADD COLUMN `status_poli`  enum('Lama','Baru') CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `status_bayar`;
+ALTER TABLE `reg_periksa` ADD CONSTRAINT `reg_periksa_ibfk_3` FOREIGN KEY (`kd_poli`) REFERENCES `poliklinik` (`kd_poli`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `reg_periksa` ADD CONSTRAINT `reg_periksa_ibfk_4` FOREIGN KEY (`kd_dokter`) REFERENCES `dokter` (`kd_dokter`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `reg_periksa` ADD CONSTRAINT `reg_periksa_ibfk_6` FOREIGN KEY (`kd_pj`) REFERENCES `penjab` (`kd_pj`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `reg_periksa` ADD CONSTRAINT `reg_periksa_ibfk_7` FOREIGN KEY (`no_rkm_medis`) REFERENCES `pasien` (`no_rkm_medis`) ON DELETE RESTRICT ON UPDATE CASCADE;
+CREATE INDEX `sttsumur` ON `reg_periksa`(`sttsumur`) USING BTREE ;
+CREATE INDEX `umurdaftar` ON `reg_periksa`(`umurdaftar`) USING BTREE ;
+CREATE INDEX `kd_dokter` ON `reg_periksa`(`kd_dokter`) USING BTREE ;
+CREATE TABLE `resep_dokter` (
+`no_resep`  varchar(10) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`kode_brng`  varchar(15) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`jml`  double NULL DEFAULT NULL ,
+`aturan_pakai`  varchar(150) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+CONSTRAINT `resep_dokter_ibfk_1` FOREIGN KEY (`no_resep`) REFERENCES `resep_obat` (`no_resep`) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT `resep_dokter_ibfk_2` FOREIGN KEY (`kode_brng`) REFERENCES `databarang` (`kode_brng`) ON DELETE CASCADE ON UPDATE CASCADE,
+INDEX `no_resep` (`no_resep`) USING BTREE ,
+INDEX `kode_brng` (`kode_brng`) USING BTREE 
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+ALTER TABLE `resep_obat` ADD COLUMN `tgl_peresepan`  date NULL DEFAULT NULL AFTER `kd_dokter`;
+ALTER TABLE `resep_obat` ADD COLUMN `jam_peresepan`  time NULL DEFAULT NULL AFTER `tgl_peresepan`;
+ALTER TABLE `returpiutang` MODIFY COLUMN `no_rkm_medis`  varchar(15) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `nip`;
+ALTER TABLE `riwayat_barang_medis` MODIFY COLUMN `posisi`  enum('Pemberian Obat','Pengadaan','Penerimaan','Piutang','Retur Beli','Retur Jual','Retur Piutang','Mutasi','Opname','Resep Pulang','Retur Pasien','Stok Pasien Ranap','Pengambilan Medis','Penjualan','Stok Keluar') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `stok_akhir`;
+ALTER TABLE `rujuk` MODIFY COLUMN `no_rujuk`  varchar(40) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL FIRST ;
+ALTER TABLE `rujuk` MODIFY COLUMN `rujuk_ke`  varchar(150) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `no_rawat`;
+ALTER TABLE `rujuk_masuk` MODIFY COLUMN `no_rujuk`  varchar(40) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `alamat`;
+CREATE TABLE `rujukan_internal_poli` (
+`no_rawat`  varchar(17) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`kd_dokter`  varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`kd_poli`  varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+PRIMARY KEY (`no_rawat`, `kd_dokter`),
+CONSTRAINT `rujukan_internal_poli_ibfk_1` FOREIGN KEY (`no_rawat`) REFERENCES `reg_periksa` (`no_rawat`) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT `rujukan_internal_poli_ibfk_2` FOREIGN KEY (`kd_dokter`) REFERENCES `dokter` (`kd_dokter`) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT `rujukan_internal_poli_ibfk_3` FOREIGN KEY (`kd_poli`) REFERENCES `poliklinik` (`kd_poli`) ON DELETE CASCADE ON UPDATE CASCADE,
+INDEX `kd_dokter` (`kd_dokter`) USING BTREE ,
+INDEX `kd_poli` (`kd_poli`) USING BTREE 
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+ALTER TABLE `set_akun` ADD COLUMN `Stok_Keluar_Medis`  varchar(15) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `Penyerahan_Darah`;
+ALTER TABLE `set_akun` ADD COLUMN `Kontra_Stok_Keluar_Medis`  varchar(15) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `Stok_Keluar_Medis`;
+ALTER TABLE `set_akun` ADD COLUMN `HPP_Obat_Jual_Bebas`  varchar(15) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `Kontra_Stok_Keluar_Medis`;
+ALTER TABLE `set_akun` ADD COLUMN `Persediaan_Obat_Jual_Bebas`  varchar(15) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `HPP_Obat_Jual_Bebas`;
+ALTER TABLE `set_akun` ADD CONSTRAINT `set_akun_ibfk_23` FOREIGN KEY (`Stok_Keluar_Medis`) REFERENCES `rekening` (`kd_rek`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `set_akun` ADD CONSTRAINT `set_akun_ibfk_24` FOREIGN KEY (`Kontra_Stok_Keluar_Medis`) REFERENCES `rekening` (`kd_rek`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `set_akun` ADD CONSTRAINT `set_akun_ibfk_25` FOREIGN KEY (`HPP_Obat_Jual_Bebas`) REFERENCES `rekening` (`kd_rek`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `set_akun` ADD CONSTRAINT `set_akun_ibfk_26` FOREIGN KEY (`Persediaan_Obat_Jual_Bebas`) REFERENCES `rekening` (`kd_rek`) ON DELETE RESTRICT ON UPDATE CASCADE;
+CREATE INDEX `Stok_Keluar_Medis` ON `set_akun`(`Stok_Keluar_Medis`) USING BTREE ;
+CREATE INDEX `Kontra_Stok_Keluar_Medis` ON `set_akun`(`Kontra_Stok_Keluar_Medis`) USING BTREE ;
+CREATE INDEX `HPP_Obat_Jual_Bebas` ON `set_akun`(`HPP_Obat_Jual_Bebas`) USING BTREE ;
+CREATE INDEX `Persediaan_Obat_Jual_Bebas` ON `set_akun`(`Persediaan_Obat_Jual_Bebas`) USING BTREE ;
+CREATE INDEX `tarif` ON `set_harga_kamar`(`tarif`) USING BTREE ;
+ALTER TABLE `set_jam_minimal` ADD COLUMN `aktifkan_hapus_data_salah`  enum('Yes','No') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `bayi`;
+ALTER TABLE `set_jam_minimal` ADD COLUMN `kamar_inap_kasir_ralan`  enum('Yes','No') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `aktifkan_hapus_data_salah`;
+ALTER TABLE `set_nota` ADD COLUMN `cetaknotasimpanpenjualan`  enum('Yes','No') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `verifikasi_penyerahan_darah_di_kasir`;
+ALTER TABLE `set_nota` ADD COLUMN `tampilkan_tombol_nota_penjualan`  enum('Yes','No') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `cetaknotasimpanpenjualan`;
+ALTER TABLE `set_nota` ADD COLUMN `centangobatralan`  enum('Yes','No') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `tampilkan_tombol_nota_penjualan`;
+CREATE TABLE `set_otomatis_tindakan_ralan_dokterpetugas` (
+`kd_dokter`  varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`kd_jenis_prw`  varchar(15) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`kd_pj`  char(3) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT '' ,
+PRIMARY KEY (`kd_dokter`, `kd_jenis_prw`, `kd_pj`),
+CONSTRAINT `set_otomatis_tindakan_ralan_dokterpetugas_ibfk_1` FOREIGN KEY (`kd_dokter`) REFERENCES `dokter` (`kd_dokter`) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT `set_otomatis_tindakan_ralan_dokterpetugas_ibfk_2` FOREIGN KEY (`kd_jenis_prw`) REFERENCES `jns_perawatan` (`kd_jenis_prw`) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT `set_otomatis_tindakan_ralan_dokterpetugas_ibfk_3` FOREIGN KEY (`kd_pj`) REFERENCES `penjab` (`kd_pj`) ON DELETE CASCADE ON UPDATE CASCADE,
+INDEX `kd_jenis_prw` (`kd_jenis_prw`) USING BTREE ,
+INDEX `kd_pj` (`kd_pj`) USING BTREE 
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+CREATE TABLE `set_otomatis_tindakan_ralan_petugas` (
+`kd_jenis_prw`  varchar(15) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`kd_pj`  char(3) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+PRIMARY KEY (`kd_jenis_prw`, `kd_pj`),
+CONSTRAINT `set_otomatis_tindakan_ralan_petugas_ibfk_1` FOREIGN KEY (`kd_jenis_prw`) REFERENCES `jns_perawatan` (`kd_jenis_prw`) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT `set_otomatis_tindakan_ralan_petugas_ibfk_2` FOREIGN KEY (`kd_pj`) REFERENCES `penjab` (`kd_pj`) ON DELETE CASCADE ON UPDATE CASCADE,
+INDEX `kd_pj` (`kd_pj`) USING BTREE 
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+ALTER TABLE `set_tarif` ADD COLUMN `kelas_ranap`  enum('Yes','No') CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `cara_bayar_operasi`;
+ALTER TABLE `set_tarif` ADD COLUMN `kelas_lab`  enum('Yes','No') CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `kelas_ranap`;
+ALTER TABLE `set_tarif` ADD COLUMN `kelas_radiologi`  enum('Yes','No') CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `kelas_lab`;
+ALTER TABLE `set_tarif` ADD COLUMN `kelas_operasi`  enum('Yes','No') CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `kelas_radiologi`;
+CREATE TABLE `set_validasi_catatan` (
+`tampilkan_catatan`  enum('Yes','No') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL 
+)
+ENGINE=MyISAM
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+CHECKSUM=0
+ROW_FORMAT=Fixed
+DELAY_KEY_WRITE=0
+;
+CREATE TABLE `surat_balas` (
+`kd`  varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`balas`  int(50) NOT NULL ,
+PRIMARY KEY (`kd`)
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+CREATE TABLE `surat_indeks` (
+`kd`  varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`indeks`  varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+PRIMARY KEY (`kd`)
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+CREATE TABLE `surat_keluar` (
+`no_urut`  varchar(15) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`no_surat`  varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`tujuan`  varchar(300) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`tgl_surat`  date NOT NULL ,
+`perihal`  varchar(300) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`tgl_terima`  date NOT NULL ,
+`kd_lemari`  varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`kd_rak`  varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`kd_map`  varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`kd_ruang`  varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`kd_sifat`  varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`lampiran`  varchar(300) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`tembusan`  varchar(300) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`tgl_deadline_balas`  date NOT NULL ,
+`kd_balas`  varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`keterangan`  varchar(300) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`kd_status`  varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`kd_klasifikasi`  varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`file_url`  varchar(500) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+PRIMARY KEY (`no_urut`),
+CONSTRAINT `surat_keluar_ibfk_1` FOREIGN KEY (`kd_lemari`) REFERENCES `surat_lemari` (`kd`) ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT `surat_keluar_ibfk_10` FOREIGN KEY (`kd_rak`) REFERENCES `surat_rak` (`kd`) ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT `surat_keluar_ibfk_11` FOREIGN KEY (`kd_map`) REFERENCES `surat_map` (`kd`) ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT `surat_keluar_ibfk_12` FOREIGN KEY (`kd_ruang`) REFERENCES `surat_ruang` (`kd`) ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT `surat_keluar_ibfk_13` FOREIGN KEY (`kd_sifat`) REFERENCES `surat_sifat` (`kd`) ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT `surat_keluar_ibfk_14` FOREIGN KEY (`kd_balas`) REFERENCES `surat_balas` (`kd`) ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT `surat_keluar_ibfk_15` FOREIGN KEY (`kd_status`) REFERENCES `surat_status` (`kd`) ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT `surat_keluar_ibfk_16` FOREIGN KEY (`kd_klasifikasi`) REFERENCES `surat_klasifikasi` (`kd`) ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT `surat_keluar_ibfk_2` FOREIGN KEY (`kd_rak`) REFERENCES `surat_rak` (`kd`) ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT `surat_keluar_ibfk_3` FOREIGN KEY (`kd_map`) REFERENCES `surat_map` (`kd`) ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT `surat_keluar_ibfk_4` FOREIGN KEY (`kd_ruang`) REFERENCES `surat_ruang` (`kd`) ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT `surat_keluar_ibfk_5` FOREIGN KEY (`kd_sifat`) REFERENCES `surat_sifat` (`kd`) ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT `surat_keluar_ibfk_6` FOREIGN KEY (`kd_balas`) REFERENCES `surat_balas` (`kd`) ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT `surat_keluar_ibfk_7` FOREIGN KEY (`kd_status`) REFERENCES `surat_status` (`kd`) ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT `surat_keluar_ibfk_8` FOREIGN KEY (`kd_klasifikasi`) REFERENCES `surat_klasifikasi` (`kd`) ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT `surat_keluar_ibfk_9` FOREIGN KEY (`kd_lemari`) REFERENCES `surat_lemari` (`kd`) ON DELETE RESTRICT ON UPDATE CASCADE,
+INDEX `kd_lemari` (`kd_lemari`) USING BTREE ,
+INDEX `kd_rak` (`kd_rak`) USING BTREE ,
+INDEX `kd_map` (`kd_map`) USING BTREE ,
+INDEX `kd_ruang` (`kd_ruang`) USING BTREE ,
+INDEX `kd_sifat` (`kd_sifat`) USING BTREE ,
+INDEX `kd_balas` (`kd_balas`) USING BTREE ,
+INDEX `kd_status` (`kd_status`) USING BTREE ,
+INDEX `kd_klasifikasi` (`kd_klasifikasi`) USING BTREE 
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+CREATE TABLE `surat_keluar_disposisi` (
+`no_disposisi`  varchar(15) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`kd_indeks`  varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`no_urut`  varchar(15) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`tgl_selesai`  date NOT NULL ,
+`isi`  varchar(300) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`diteruskan`  varchar(300) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`tgl_kembali`  date NOT NULL ,
+`kepada`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`pengesahan`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`harap`  varchar(300) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`catatan`  varchar(300) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+PRIMARY KEY (`no_disposisi`),
+CONSTRAINT `surat_keluar_disposisi_ibfk_1` FOREIGN KEY (`kd_indeks`) REFERENCES `surat_indeks` (`kd`) ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT `surat_keluar_disposisi_ibfk_2` FOREIGN KEY (`no_urut`) REFERENCES `surat_keluar` (`no_urut`) ON DELETE RESTRICT ON UPDATE CASCADE,
+INDEX `kd_indeks` (`kd_indeks`) USING BTREE ,
+INDEX `no_urut` (`no_urut`) USING BTREE 
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+CREATE TABLE `surat_keluar_kendali` (
+`no_kendali`  varchar(15) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`kd_indeks`  varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`no_urut`  varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`tgl_selesai`  date NOT NULL ,
+`tgl_kembali`  date NOT NULL ,
+`kepada`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+PRIMARY KEY (`no_kendali`),
+CONSTRAINT `surat_keluar_kendali_ibfk_1` FOREIGN KEY (`kd_indeks`) REFERENCES `surat_indeks` (`kd`) ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT `surat_keluar_kendali_ibfk_2` FOREIGN KEY (`no_urut`) REFERENCES `surat_keluar` (`no_urut`) ON DELETE RESTRICT ON UPDATE CASCADE,
+INDEX `no_surat` (`no_urut`) USING BTREE ,
+INDEX `kd_indeks` (`kd_indeks`) USING BTREE 
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+CREATE TABLE `surat_klasifikasi` (
+`kd`  varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`klasifikasi`  varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+PRIMARY KEY (`kd`)
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+CREATE TABLE `surat_lemari` (
+`kd`  varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`lemari`  varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+PRIMARY KEY (`kd`)
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+CREATE TABLE `surat_map` (
+`kd`  varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`map`  varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+PRIMARY KEY (`kd`)
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+CREATE TABLE `surat_masuk` (
+`no_urut`  varchar(15) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`no_surat`  varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`asal`  varchar(300) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`tujuan`  varchar(300) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`tgl_surat`  date NOT NULL ,
+`perihal`  varchar(300) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`tgl_terima`  date NOT NULL ,
+`kd_lemari`  varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`kd_rak`  varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`kd_map`  varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`kd_ruang`  varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`kd_sifat`  varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`lampiran`  varchar(300) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`tembusan`  varchar(300) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`tgl_deadline_balas`  date NOT NULL ,
+`kd_balas`  varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`keterangan`  varchar(300) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`kd_status`  varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`kd_klasifikasi`  varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`file_url`  varchar(500) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+PRIMARY KEY (`no_urut`),
+CONSTRAINT `surat_masuk_ibfk_1` FOREIGN KEY (`kd_lemari`) REFERENCES `surat_lemari` (`kd`) ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT `surat_masuk_ibfk_2` FOREIGN KEY (`kd_rak`) REFERENCES `surat_rak` (`kd`) ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT `surat_masuk_ibfk_3` FOREIGN KEY (`kd_map`) REFERENCES `surat_map` (`kd`) ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT `surat_masuk_ibfk_4` FOREIGN KEY (`kd_ruang`) REFERENCES `surat_ruang` (`kd`) ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT `surat_masuk_ibfk_5` FOREIGN KEY (`kd_sifat`) REFERENCES `surat_sifat` (`kd`) ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT `surat_masuk_ibfk_6` FOREIGN KEY (`kd_balas`) REFERENCES `surat_balas` (`kd`) ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT `surat_masuk_ibfk_7` FOREIGN KEY (`kd_status`) REFERENCES `surat_status` (`kd`) ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT `surat_masuk_ibfk_8` FOREIGN KEY (`kd_klasifikasi`) REFERENCES `surat_klasifikasi` (`kd`) ON DELETE RESTRICT ON UPDATE CASCADE,
+INDEX `kd_lemari` (`kd_lemari`) USING BTREE ,
+INDEX `kd_rak` (`kd_rak`) USING BTREE ,
+INDEX `kd_map` (`kd_map`) USING BTREE ,
+INDEX `kd_ruang` (`kd_ruang`) USING BTREE ,
+INDEX `kd_sifat` (`kd_sifat`) USING BTREE ,
+INDEX `kd_balas` (`kd_balas`) USING BTREE ,
+INDEX `kd_status` (`kd_status`) USING BTREE ,
+INDEX `kd_klasifikasi` (`kd_klasifikasi`) USING BTREE 
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+CREATE TABLE `surat_masuk_disposisi` (
+`no_disposisi`  varchar(15) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`kd_indeks`  varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`no_urut`  varchar(15) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`tgl_selesai`  date NOT NULL ,
+`isi`  varchar(300) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`diteruskan`  varchar(300) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`tgl_kembali`  date NOT NULL ,
+`kepada`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`pengesahan`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`harap`  varchar(300) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`catatan`  varchar(300) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+PRIMARY KEY (`no_disposisi`),
+CONSTRAINT `surat_masuk_disposisi_ibfk_1` FOREIGN KEY (`kd_indeks`) REFERENCES `surat_indeks` (`kd`) ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT `surat_masuk_disposisi_ibfk_2` FOREIGN KEY (`no_urut`) REFERENCES `surat_masuk` (`no_urut`) ON DELETE RESTRICT ON UPDATE CASCADE,
+INDEX `kd_indeks` (`kd_indeks`) USING BTREE ,
+INDEX `no_urut` (`no_urut`) USING BTREE 
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+CREATE TABLE `surat_masuk_kendali` (
+`no_kendali`  varchar(15) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`kd_indeks`  varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`no_urut`  varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`tgl_selesai`  date NOT NULL ,
+`tgl_kembali`  date NOT NULL ,
+`kepada`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`pengesahan`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+PRIMARY KEY (`no_kendali`),
+CONSTRAINT `surat_masuk_kendali_ibfk_1` FOREIGN KEY (`kd_indeks`) REFERENCES `surat_indeks` (`kd`) ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT `surat_masuk_kendali_ibfk_2` FOREIGN KEY (`no_urut`) REFERENCES `surat_masuk` (`no_urut`) ON DELETE RESTRICT ON UPDATE CASCADE,
+INDEX `no_surat` (`no_urut`) USING BTREE ,
+INDEX `kd_indeks` (`kd_indeks`) USING BTREE 
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+CREATE TABLE `surat_pemesanan_medis` (
+`no_pemesanan`  varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`kode_suplier`  char(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`nip`  varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`tanggal`  date NULL DEFAULT NULL ,
+`total1`  double NOT NULL ,
+`potongan`  double NOT NULL ,
+`total2`  double NOT NULL ,
+`ppn`  double NULL DEFAULT NULL ,
+`meterai`  double NULL DEFAULT NULL ,
+`tagihan`  double NULL DEFAULT NULL ,
+`status`  enum('Proses Pesan','Sudah Datang') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+PRIMARY KEY (`no_pemesanan`),
+CONSTRAINT `surat_pemesanan_medis_ibfk_1` FOREIGN KEY (`kode_suplier`) REFERENCES `datasuplier` (`kode_suplier`) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT `surat_pemesanan_medis_ibfk_2` FOREIGN KEY (`nip`) REFERENCES `pegawai` (`nik`) ON DELETE CASCADE ON UPDATE CASCADE,
+INDEX `kode_suplier` (`kode_suplier`) USING BTREE ,
+INDEX `surat_pemesanan_medis_ibfk_2` (`nip`) USING BTREE 
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+CREATE TABLE `surat_pemesanan_non_medis` (
+`no_pemesanan`  varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`kode_suplier`  char(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`nip`  varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`tanggal`  date NULL DEFAULT NULL ,
+`subtotal`  double NOT NULL ,
+`potongan`  double NOT NULL ,
+`total`  double NOT NULL ,
+`ppn`  double NULL DEFAULT NULL ,
+`meterai`  double NULL DEFAULT NULL ,
+`tagihan`  double NULL DEFAULT NULL ,
+`status`  enum('Proses Pesan','Sudah Datang') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+PRIMARY KEY (`no_pemesanan`),
+CONSTRAINT `surat_pemesanan_non_medis_ibfk_1` FOREIGN KEY (`kode_suplier`) REFERENCES `ipsrssuplier` (`kode_suplier`) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT `surat_pemesanan_non_medis_ibfk_2` FOREIGN KEY (`nip`) REFERENCES `pegawai` (`nik`) ON DELETE CASCADE ON UPDATE CASCADE,
+INDEX `kode_suplier` (`kode_suplier`) USING BTREE ,
+INDEX `nip` (`nip`) USING BTREE 
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+CREATE TABLE `surat_rak` (
+`kd`  varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`rak`  varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+PRIMARY KEY (`kd`)
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+CREATE TABLE `surat_ruang` (
+`kd`  varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`ruang`  varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+INDEX `kd` (`kd`) USING BTREE 
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+CREATE TABLE `surat_sifat` (
+`kd`  varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`sifat`  varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+PRIMARY KEY (`kd`)
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+CREATE TABLE `surat_status` (
+`kd`  varchar(4) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`status`  varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+PRIMARY KEY (`kd`)
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+ALTER TABLE `tampjurnal` MODIFY COLUMN `kd_rek`  char(15) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL FIRST ;
+CREATE INDEX `nm_rek` ON `tampjurnal`(`nm_rek`) USING BTREE ;
+CREATE INDEX `debet` ON `tampjurnal`(`debet`) USING BTREE ;
+CREATE INDEX `kredit` ON `tampjurnal`(`kredit`) USING BTREE ;
+ALTER TABLE `tampreturbeli` MODIFY COLUMN `no_faktur`  varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT '' FIRST ;
+ALTER TABLE `tampreturjual` MODIFY COLUMN `nota_jual`  varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT '' FIRST ;
+ALTER TABLE `tampreturpiutang` MODIFY COLUMN `nota_piutang`  varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT '' FIRST ;
+ALTER TABLE `template_laboratorium` MODIFY COLUMN `urut`  int(4) NULL DEFAULT NULL AFTER `biaya_item`;
+CREATE INDEX `Pemeriksaan` ON `template_laboratorium`(`Pemeriksaan`) USING BTREE ;
+CREATE INDEX `satuan` ON `template_laboratorium`(`satuan`) USING BTREE ;
+CREATE INDEX `nilai_rujukan_ld` ON `template_laboratorium`(`nilai_rujukan_ld`) USING BTREE ;
+CREATE INDEX `nilai_rujukan_la` ON `template_laboratorium`(`nilai_rujukan_la`) USING BTREE ;
+CREATE INDEX `nilai_rujukan_pd` ON `template_laboratorium`(`nilai_rujukan_pd`) USING BTREE ;
+CREATE INDEX `nilai_rujukan_pa` ON `template_laboratorium`(`nilai_rujukan_pa`) USING BTREE ;
+CREATE INDEX `bagian_rs` ON `template_laboratorium`(`bagian_rs`) USING BTREE ;
+CREATE INDEX `bhp` ON `template_laboratorium`(`bhp`) USING BTREE ;
+CREATE INDEX `bagian_perujuk` ON `template_laboratorium`(`bagian_perujuk`) USING BTREE ;
+CREATE INDEX `bagian_dokter` ON `template_laboratorium`(`bagian_dokter`) USING BTREE ;
+CREATE INDEX `bagian_laborat` ON `template_laboratorium`(`bagian_laborat`) USING BTREE ;
+CREATE INDEX `kso` ON `template_laboratorium`(`kso`) USING BTREE ;
+CREATE INDEX `menejemen` ON `template_laboratorium`(`menejemen`) USING BTREE ;
+CREATE INDEX `biaya_item` ON `template_laboratorium`(`biaya_item`) USING BTREE ;
+CREATE INDEX `urut` ON `template_laboratorium`(`urut`) USING BTREE ;
+CREATE TABLE `template_utd` (
+`kd_jenis_prw`  varchar(15) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`id_template`  int(11) NOT NULL AUTO_INCREMENT ,
+`pemeriksaan`  varchar(200) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+`nilai_rujukan`  varchar(30) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`bagian_rs`  double NULL DEFAULT NULL ,
+`bhp`  double NULL DEFAULT NULL ,
+`bagian_perujuk`  double NULL DEFAULT NULL ,
+`bagian_dokter`  double NULL DEFAULT NULL ,
+`petugas_utd`  double NULL DEFAULT NULL ,
+`kso`  double NULL DEFAULT NULL ,
+`menejemen`  double NULL DEFAULT NULL ,
+`biaya_item`  double NULL DEFAULT NULL ,
+`urut`  tinyint(4) NULL DEFAULT NULL ,
+PRIMARY KEY (`id_template`),
+CONSTRAINT `template_utd_ibfk_1` FOREIGN KEY (`kd_jenis_prw`) REFERENCES `jns_perawatan_utd` (`kd_jenis_prw`) ON DELETE CASCADE ON UPDATE CASCADE,
+INDEX `kd_jenis_prw` (`kd_jenis_prw`) USING BTREE 
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=latin1 COLLATE=latin1_swedish_ci
+ROW_FORMAT=Compact
+;
+ALTER TABLE `temporary` MODIFY COLUMN `no`  int(100) NOT NULL FIRST ;
+ALTER TABLE `temporary` MODIFY COLUMN `temp1`  varchar(1000) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `no`;
+ALTER TABLE `temporary` MODIFY COLUMN `temp2`  varchar(1000) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp1`;
+ALTER TABLE `temporary` MODIFY COLUMN `temp3`  varchar(1000) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp2`;
+ALTER TABLE `temporary` MODIFY COLUMN `temp4`  varchar(1000) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp3`;
+ALTER TABLE `temporary` MODIFY COLUMN `temp5`  varchar(1000) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp4`;
+ALTER TABLE `temporary` MODIFY COLUMN `temp6`  varchar(1000) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp5`;
+ALTER TABLE `temporary` MODIFY COLUMN `temp7`  varchar(1000) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp6`;
+ALTER TABLE `temporary` MODIFY COLUMN `temp8`  varchar(1000) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp7`;
+ALTER TABLE `temporary` MODIFY COLUMN `temp9`  varchar(1000) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp8`;
+ALTER TABLE `temporary` MODIFY COLUMN `temp10`  varchar(1000) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp9`;
+ALTER TABLE `temporary` MODIFY COLUMN `temp11`  varchar(1000) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp10`;
+ALTER TABLE `temporary` MODIFY COLUMN `temp12`  varchar(1000) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp11`;
+ALTER TABLE `temporary` MODIFY COLUMN `temp13`  varchar(1000) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp12`;
+ALTER TABLE `temporary` MODIFY COLUMN `temp14`  varchar(1000) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp13`;
+ALTER TABLE `temporary` MODIFY COLUMN `temp15`  varchar(1000) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp14`;
+ALTER TABLE `temporary` MODIFY COLUMN `temp16`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp15`;
+ALTER TABLE `temporary` MODIFY COLUMN `temp17`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp16`;
+ALTER TABLE `temporary` MODIFY COLUMN `temp18`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp17`;
+ALTER TABLE `temporary` MODIFY COLUMN `temp19`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp18`;
+ALTER TABLE `temporary` MODIFY COLUMN `temp20`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp19`;
+ALTER TABLE `temporary` MODIFY COLUMN `temp21`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp20`;
+ALTER TABLE `temporary` MODIFY COLUMN `temp22`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp21`;
+ALTER TABLE `temporary` MODIFY COLUMN `temp23`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp22`;
+ALTER TABLE `temporary` MODIFY COLUMN `temp24`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp23`;
+ALTER TABLE `temporary` MODIFY COLUMN `temp25`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp24`;
+ALTER TABLE `temporary` MODIFY COLUMN `temp26`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp25`;
+ALTER TABLE `temporary` MODIFY COLUMN `temp27`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp26`;
+ALTER TABLE `temporary` MODIFY COLUMN `temp28`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp27`;
+ALTER TABLE `temporary` MODIFY COLUMN `temp29`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp28`;
+ALTER TABLE `temporary` MODIFY COLUMN `temp30`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp29`;
+ALTER TABLE `temporary` MODIFY COLUMN `temp31`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp30`;
+ALTER TABLE `temporary` MODIFY COLUMN `temp32`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp31`;
+ALTER TABLE `temporary` MODIFY COLUMN `temp33`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp32`;
+ALTER TABLE `temporary` MODIFY COLUMN `temp34`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp33`;
+ALTER TABLE `temporary` MODIFY COLUMN `temp35`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp34`;
+ALTER TABLE `temporary` MODIFY COLUMN `temp36`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp35`;
+ALTER TABLE `temporary` MODIFY COLUMN `temp37`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp36`;
+ALTER TABLE `temporary` MODIFY COLUMN `no`  int(100) NOT NULL AUTO_INCREMENT FIRST ;
+ALTER TABLE `temporary_bayar_ralan` MODIFY COLUMN `no`  int(100) NOT NULL FIRST ;
+ALTER TABLE `temporary_bayar_ralan` MODIFY COLUMN `temp1`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `no`;
+ALTER TABLE `temporary_bayar_ralan` MODIFY COLUMN `temp2`  varchar(200) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp1`;
+ALTER TABLE `temporary_bayar_ralan` MODIFY COLUMN `temp3`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp2`;
+ALTER TABLE `temporary_bayar_ralan` MODIFY COLUMN `temp4`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp3`;
+ALTER TABLE `temporary_bayar_ralan` MODIFY COLUMN `temp5`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp4`;
+ALTER TABLE `temporary_bayar_ralan` MODIFY COLUMN `temp6`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp5`;
+ALTER TABLE `temporary_bayar_ralan` MODIFY COLUMN `temp7`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp6`;
+ALTER TABLE `temporary_bayar_ralan` MODIFY COLUMN `temp8`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp7`;
+ALTER TABLE `temporary_bayar_ralan` MODIFY COLUMN `temp9`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp8`;
+ALTER TABLE `temporary_bayar_ralan` MODIFY COLUMN `temp10`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp9`;
+ALTER TABLE `temporary_bayar_ralan` MODIFY COLUMN `temp11`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp10`;
+ALTER TABLE `temporary_bayar_ralan` MODIFY COLUMN `temp12`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp11`;
+ALTER TABLE `temporary_bayar_ralan` MODIFY COLUMN `temp13`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp12`;
+ALTER TABLE `temporary_bayar_ralan` MODIFY COLUMN `temp14`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp13`;
+ALTER TABLE `temporary_bayar_ralan` MODIFY COLUMN `temp15`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp14`;
+ALTER TABLE `temporary_bayar_ralan` MODIFY COLUMN `temp16`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp15`;
+ALTER TABLE `temporary_bayar_ralan` MODIFY COLUMN `temp17`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp16`;
+ALTER TABLE `temporary_bayar_ralan` MODIFY COLUMN `no`  int(100) NOT NULL AUTO_INCREMENT FIRST ;
+ALTER TABLE `temporary_bayar_ranap` MODIFY COLUMN `no`  int(100) NOT NULL FIRST ;
+ALTER TABLE `temporary_bayar_ranap` MODIFY COLUMN `temp1`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `no`;
+ALTER TABLE `temporary_bayar_ranap` MODIFY COLUMN `temp2`  varchar(200) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp1`;
+ALTER TABLE `temporary_bayar_ranap` MODIFY COLUMN `temp3`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp2`;
+ALTER TABLE `temporary_bayar_ranap` MODIFY COLUMN `temp4`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp3`;
+ALTER TABLE `temporary_bayar_ranap` MODIFY COLUMN `temp5`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp4`;
+ALTER TABLE `temporary_bayar_ranap` MODIFY COLUMN `temp6`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp5`;
+ALTER TABLE `temporary_bayar_ranap` MODIFY COLUMN `temp7`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp6`;
+ALTER TABLE `temporary_bayar_ranap` MODIFY COLUMN `temp8`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp7`;
+ALTER TABLE `temporary_bayar_ranap` MODIFY COLUMN `temp9`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp8`;
+ALTER TABLE `temporary_bayar_ranap` MODIFY COLUMN `temp10`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp9`;
+ALTER TABLE `temporary_bayar_ranap` MODIFY COLUMN `temp11`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp10`;
+ALTER TABLE `temporary_bayar_ranap` MODIFY COLUMN `temp12`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp11`;
+ALTER TABLE `temporary_bayar_ranap` MODIFY COLUMN `temp13`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp12`;
+ALTER TABLE `temporary_bayar_ranap` MODIFY COLUMN `temp14`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp13`;
+ALTER TABLE `temporary_bayar_ranap` MODIFY COLUMN `temp15`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp14`;
+ALTER TABLE `temporary_bayar_ranap` MODIFY COLUMN `temp16`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp15`;
+ALTER TABLE `temporary_bayar_ranap` MODIFY COLUMN `temp17`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp16`;
+ALTER TABLE `temporary_bayar_ranap` MODIFY COLUMN `no`  int(100) NOT NULL AUTO_INCREMENT FIRST ;
+ALTER TABLE `temporary2` MODIFY COLUMN `no`  int(100) NOT NULL FIRST ;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp1`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `no`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp2`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp1`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp3`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp2`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp4`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp3`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp5`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp4`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp6`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp5`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp7`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp6`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp8`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp7`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp9`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp8`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp10`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp9`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp11`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp10`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp12`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp11`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp13`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp12`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp14`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp13`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp15`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp14`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp16`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp15`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp17`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp16`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp18`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp17`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp19`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp18`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp20`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp19`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp21`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp20`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp22`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp21`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp23`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp22`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp24`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp23`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp25`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp24`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp26`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp25`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp27`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp26`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp28`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp27`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp29`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp28`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp30`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp29`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp31`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp30`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp32`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp31`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp33`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp32`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp34`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp33`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp35`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp34`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp36`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp35`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp37`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp36`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp38`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp37`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp39`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp38`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp40`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp39`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp41`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp40`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp42`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp41`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp43`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp42`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp44`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp43`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp45`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp44`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp46`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp45`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp47`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp46`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp48`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp47`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp49`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp48`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp50`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp49`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp51`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp50`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp52`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp51`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp53`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp52`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp54`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp53`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp55`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp54`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp56`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp55`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp57`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp56`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp58`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp57`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp59`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp58`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp60`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp59`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp61`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp60`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp62`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp61`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp63`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp62`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp64`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp63`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp65`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp64`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp66`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp65`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp67`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp66`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp68`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp67`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp69`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp68`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp70`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp69`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp71`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp70`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp72`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp71`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp73`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp72`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp74`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp73`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp75`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp74`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp76`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp75`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp77`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp76`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp78`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp77`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp79`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp78`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp80`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp79`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp81`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp80`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp82`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp81`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp83`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp82`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp84`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp83`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp85`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp84`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp86`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp85`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp87`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp86`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp88`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp87`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp89`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp88`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp90`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp89`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp91`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp90`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp92`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp91`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp93`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp92`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp94`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp93`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp95`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp94`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp96`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp95`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp97`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp96`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp98`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp97`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp99`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp98`;
+ALTER TABLE `temporary2` MODIFY COLUMN `temp100`  varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `temp99`;
+ALTER TABLE `temporary2` MODIFY COLUMN `no`  int(100) NOT NULL AUTO_INCREMENT FIRST ;
+ALTER TABLE `user` ADD COLUMN `perusahaan_pasien`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `hitung_bor`;
+ALTER TABLE `user` ADD COLUMN `resep_dokter`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `perusahaan_pasien`;
+ALTER TABLE `user` ADD COLUMN `lama_pelayanan_apotek`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `resep_dokter`;
+ALTER TABLE `user` ADD COLUMN `hitung_alos`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `lama_pelayanan_apotek`;
+ALTER TABLE `user` ADD COLUMN `detail_tindakan`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `hitung_alos`;
+ALTER TABLE `user` ADD COLUMN `rujukan_poli_internal`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `detail_tindakan`;
+ALTER TABLE `user` ADD COLUMN `rekap_poli_anak`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `rujukan_poli_internal`;
+ALTER TABLE `user` ADD COLUMN `grafik_kunjungan_poli`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `rekap_poli_anak`;
+ALTER TABLE `user` ADD COLUMN `grafik_kunjungan_perdokter`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `grafik_kunjungan_poli`;
+ALTER TABLE `user` ADD COLUMN `grafik_kunjungan_perpekerjaan`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `grafik_kunjungan_perdokter`;
+ALTER TABLE `user` ADD COLUMN `grafik_kunjungan_perpendidikan`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `grafik_kunjungan_perpekerjaan`;
+ALTER TABLE `user` ADD COLUMN `grafik_kunjungan_pertahun`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `grafik_kunjungan_perpendidikan`;
+ALTER TABLE `user` ADD COLUMN `berkas_digital_perawatan`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `grafik_kunjungan_pertahun`;
+ALTER TABLE `user` ADD COLUMN `penyakit_menular_ranap`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `berkas_digital_perawatan`;
+ALTER TABLE `user` ADD COLUMN `penyakit_menular_ralan`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `penyakit_menular_ranap`;
+ALTER TABLE `user` ADD COLUMN `grafik_kunjungan_perbulan`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `penyakit_menular_ralan`;
+ALTER TABLE `user` ADD COLUMN `grafik_kunjungan_pertanggal`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `grafik_kunjungan_perbulan`;
+ALTER TABLE `user` ADD COLUMN `grafik_kunjungan_demografi`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `grafik_kunjungan_pertanggal`;
+ALTER TABLE `user` ADD COLUMN `grafik_kunjungan_statusdaftartahun`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `grafik_kunjungan_demografi`;
+ALTER TABLE `user` ADD COLUMN `grafik_kunjungan_statusdaftartahun2`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `grafik_kunjungan_statusdaftartahun`;
+ALTER TABLE `user` ADD COLUMN `grafik_kunjungan_statusdaftarbulan`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `grafik_kunjungan_statusdaftartahun2`;
+ALTER TABLE `user` ADD COLUMN `grafik_kunjungan_statusdaftarbulan2`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `grafik_kunjungan_statusdaftarbulan`;
+ALTER TABLE `user` ADD COLUMN `grafik_kunjungan_statusdaftartanggal`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `grafik_kunjungan_statusdaftarbulan2`;
+ALTER TABLE `user` ADD COLUMN `grafik_kunjungan_statusdaftartanggal2`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `grafik_kunjungan_statusdaftartanggal`;
+ALTER TABLE `user` ADD COLUMN `grafik_kunjungan_statusbataltahun`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `grafik_kunjungan_statusdaftartanggal2`;
+ALTER TABLE `user` ADD COLUMN `grafik_kunjungan_statusbatalbulan`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `grafik_kunjungan_statusbataltahun`;
+ALTER TABLE `user` ADD COLUMN `pcare_cek_penyakit`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `grafik_kunjungan_statusbatalbulan`;
+ALTER TABLE `user` ADD COLUMN `grafik_kunjungan_statusbataltanggal`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `pcare_cek_penyakit`;
+ALTER TABLE `user` ADD COLUMN `kategori_barang`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `grafik_kunjungan_statusbataltanggal`;
+ALTER TABLE `user` ADD COLUMN `golongan_barang`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `kategori_barang`;
+ALTER TABLE `user` ADD COLUMN `pemberian_obat_pertanggal`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `golongan_barang`;
+ALTER TABLE `user` ADD COLUMN `penjualan_obat_pertanggal`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `pemberian_obat_pertanggal`;
+ALTER TABLE `user` ADD COLUMN `pcare_cek_kesadaran`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `penjualan_obat_pertanggal`;
+ALTER TABLE `user` ADD COLUMN `pembatalan_periksa_dokter`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `pcare_cek_kesadaran`;
+ALTER TABLE `user` ADD COLUMN `pembayaran_per_unit`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `pembatalan_periksa_dokter`;
+ALTER TABLE `user` ADD COLUMN `rekap_pembayaran_per_unit`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `pembayaran_per_unit`;
+ALTER TABLE `user` ADD COLUMN `grafik_kunjungan_percarabayar`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `rekap_pembayaran_per_unit`;
+ALTER TABLE `user` ADD COLUMN `ipsrs_pengadaan_pertanggal`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `grafik_kunjungan_percarabayar`;
+ALTER TABLE `user` ADD COLUMN `ipsrs_stokkeluar_pertanggal`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `ipsrs_pengadaan_pertanggal`;
+ALTER TABLE `user` ADD COLUMN `grafik_kunjungan_ranaptahun`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `ipsrs_stokkeluar_pertanggal`;
+ALTER TABLE `user` ADD COLUMN `pcare_cek_rujukan`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `grafik_kunjungan_ranaptahun`;
+ALTER TABLE `user` ADD COLUMN `grafik_lab_ralantahun`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `pcare_cek_rujukan`;
+ALTER TABLE `user` ADD COLUMN `grafik_rad_ralantahun`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `grafik_lab_ralantahun`;
+ALTER TABLE `user` ADD COLUMN `cek_entry_ralan`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `grafik_rad_ralantahun`;
+ALTER TABLE `user` ADD COLUMN `inacbg_klaim_baru_manual2`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `cek_entry_ralan`;
+ALTER TABLE `user` ADD COLUMN `permintaan_medis`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `inacbg_klaim_baru_manual2`;
+ALTER TABLE `user` ADD COLUMN `rekap_permintaan_medis`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `permintaan_medis`;
+ALTER TABLE `user` ADD COLUMN `surat_pemesanan_medis`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `rekap_permintaan_medis`;
+ALTER TABLE `user` ADD COLUMN `permintaan_non_medis`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `surat_pemesanan_medis`;
+ALTER TABLE `user` ADD COLUMN `rekap_permintaan_non_medis`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `permintaan_non_medis`;
+ALTER TABLE `user` ADD COLUMN `surat_pemesanan_non_medis`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `rekap_permintaan_non_medis`;
+ALTER TABLE `user` ADD COLUMN `grafik_per_perujuk`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL AFTER `surat_pemesanan_non_medis`;
+ALTER TABLE `user` ADD COLUMN `bpjs_cek_prosedur`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `grafik_per_perujuk`;
+ALTER TABLE `user` ADD COLUMN `bpjs_cek_kelas_rawat`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `bpjs_cek_prosedur`;
+ALTER TABLE `user` ADD COLUMN `bpjs_cek_dokter`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `bpjs_cek_kelas_rawat`;
+ALTER TABLE `user` ADD COLUMN `bpjs_cek_spesialistik`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `bpjs_cek_dokter`;
+ALTER TABLE `user` ADD COLUMN `bpjs_cek_ruangrawat`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `bpjs_cek_spesialistik`;
+ALTER TABLE `user` ADD COLUMN `bpjs_cek_carakeluar`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `bpjs_cek_ruangrawat`;
+ALTER TABLE `user` ADD COLUMN `bpjs_cek_pasca_pulang`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `bpjs_cek_carakeluar`;
+ALTER TABLE `user` ADD COLUMN `detail_tindakan_okvk`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `bpjs_cek_pasca_pulang`;
+ALTER TABLE `user` ADD COLUMN `billing_parsial`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `detail_tindakan_okvk`;
+ALTER TABLE `user` ADD COLUMN `bpjs_cek_nomor_rujukan_rs`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `billing_parsial`;
+ALTER TABLE `user` ADD COLUMN `bpjs_cek_rujukan_kartu_pcare`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `bpjs_cek_nomor_rujukan_rs`;
+ALTER TABLE `user` ADD COLUMN `bpjs_cek_rujukan_kartu_rs`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `bpjs_cek_rujukan_kartu_pcare`;
+ALTER TABLE `user` ADD COLUMN `akses_depo_obat`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `bpjs_cek_rujukan_kartu_rs`;
+ALTER TABLE `user` ADD COLUMN `bpjs_rujukan_keluar`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `akses_depo_obat`;
+ALTER TABLE `user` ADD COLUMN `grafik_lab_ralanbulan`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `bpjs_rujukan_keluar`;
+ALTER TABLE `user` ADD COLUMN `pengeluaran_stok_apotek`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `grafik_lab_ralanbulan`;
+ALTER TABLE `user` ADD COLUMN `grafik_rad_ralanbulan`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `pengeluaran_stok_apotek`;
+ALTER TABLE `user` ADD COLUMN `detailjmdokter2`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `grafik_rad_ralanbulan`;
+ALTER TABLE `user` ADD COLUMN `pengaduan_pasien`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `detailjmdokter2`;
+ALTER TABLE `user` ADD COLUMN `grafik_lab_ralanhari`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `pengaduan_pasien`;
+ALTER TABLE `user` ADD COLUMN `grafik_rad_ralanhari`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `grafik_lab_ralanhari`;
+ALTER TABLE `user` ADD COLUMN `sensus_harian_ralan`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `grafik_rad_ralanhari`;
+ALTER TABLE `user` ADD COLUMN `metode_racik`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `sensus_harian_ralan`;
+ALTER TABLE `user` ADD COLUMN `pembayaran_akun_bayar`  enum('true','false') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL AFTER `metode_racik`;
+DROP TABLE `detail_periksa_lab_rujukan`;
+DROP TABLE `periksa_lab_rujukan`;
+DROP TABLE `tarif_penjab_ralan`;
+DROP TABLE `tarif_penjab_ranap`;
+SET FOREIGN_KEY_CHECKS=1;
+
+
+MANUAL dirubah di foreign key nya menjadi restrict dari cascade on delete
+ALTER TABLE `databarang` ADD CONSTRAINT `databarang_ibfk_4` FOREIGN KEY (`kode_industri`) REFERENCES `industrifarmasi` (`kode_industri`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+MANUAL dirubah langsung dari tabelnya
+ALTER TABLE `mutasibarang` DROP PRIMARY KEY;
+ALTER TABLE `mutasibarang` ADD PRIMARY KEY (`kode_brng`, `kd_bangsaldari`, `kd_bangsalke`, `tanggal`);
