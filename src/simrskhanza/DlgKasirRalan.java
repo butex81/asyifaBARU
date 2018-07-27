@@ -5942,8 +5942,8 @@ private void MnDataPemberianObatActionPerformed(java.awt.event.ActionEvent evt) 
                                    rskasir.getString(1),
                                    rskasir.getString("status_bayar"),
                                    rskasir.getString("status_poli"),
-                                   rskasir.getString(16),
-                                   rskasir.getString(17)});
+                                   rskasir.getString("alasan"),
+                                   rskasir.getString("petugas")});
                 }                
             } catch(Exception e){
                 System.out.println("Notifikasi : "+e);

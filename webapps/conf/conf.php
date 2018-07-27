@@ -1,9 +1,9 @@
 <?php
 
     $db_hostname    ="localhost";
-    $db_username    ="simrs";
+    $db_username    ="haamboo_simrs";
     $db_password    ="212simrsadmin";
-    $db_name        ="sik";
+    $db_name        ="haamboo_sik";
 
     function host(){
         global $db_hostname;
