@@ -42,7 +42,7 @@
                                     </font> 
 				</center>
 			    </td>
-			    <td  width='20%' align='right'><font color='000000' size='2'  face='Tahoma'>$carabayar</font></td>
+			    <!--td  width='20%' align='right'><font color='000000' size='2'  face='Tahoma'>$carabayar</font></td-->
                         </tr>
                   </table>
             </td>
@@ -50,10 +50,15 @@
             <tr>
               <td colspan='7' padding='0'>
                <hr/>
-                <center><font color='333333' size='1'  face='Tahoma'>BILLING</font> </center>
+                <center><font color='333333' size='1'  face='Tahoma'>STRUK PEMBAYARAN</font> </center>
               </td>
             </tr>
             ";  $z=1;
+                    echo "<tr class='isi12' padding='0'>
+                       <td padding='0'><font color='000000' size='1'  face='Tahoma'>Jenis Bayar</td> 
+                       <td padding='0' colspan='6'><font color='000000' size='1'  face='Tahoma'>:&nbsp;$carabayar</font></td>   
+                      </tr>"; 			                    
+			
                 while($inapdrpasien = mysqli_fetch_array($hasil)) {
                    if($z<=6){
                       echo "<tr class='isi12' padding='0'>

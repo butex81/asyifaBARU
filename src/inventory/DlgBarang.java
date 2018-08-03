@@ -63,7 +63,7 @@ public class DlgBarang extends javax.swing.JDialog {
                 + " databarang.utama,databarang.vip,databarang.vvip,databarang.beliluar,databarang.jualbebas,"
                 + " databarang.karyawan,databarang.stokminimal, databarang.kdjns,"
                 + " jenis.nama,kapasitas,databarang.expire,databarang.kode_industri,industrifarmasi.nama_industri, "
-                + " databarang.kode_kategori,kategori_barang.nama as kategori,databarang.kode_golongan,golongan_barang.nama as golongan "
+                + " databarang.kode_kategori,kategori_barang.nama as kategori,databarang.kode_golongan,golongan_barang.nama as golongan, databarang.stokmaximal, databarang.stoknormal "
                 + " from databarang inner join kodesatuan inner join jenis inner join industrifarmasi inner join golongan_barang inner join kategori_barang "
                 + " on databarang.kode_sat=kodesatuan.kode_sat and databarang.kdjns=jenis.kdjns "
                 + " and databarang.kode_golongan=golongan_barang.kode and databarang.kode_kategori=kategori_barang.kode "
@@ -85,11 +85,30 @@ public class DlgBarang extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
 
+        label30.setVisible(false);
+        label33.setVisible(false);
+        label34.setVisible(false);
+        label35.setVisible(false);
+        label36.setVisible(false);
+        label37.setVisible(false);
+        label38.setVisible(false);
+        label26.setVisible(false);
+        label28.setVisible(false);
+        kelas3.setVisible(false);
+        utama.setVisible(false);
+        kelasvip.setVisible(false);
+        kelasvvip.setVisible(false);
+        beliluar.setVisible(false);
+        jualbebas.setVisible(false);
+        karyawan.setVisible(false);
+        kelas1.setVisible(false);
+        kelas2.setVisible(false);
+        
         Object[] row = {
             "P", "Kode Barang", "Nama Barang", "Kode Satuan", "Nama Satuan", "Letak Barang",
-            "Hrg.Beli(Rp)", "Ralan(Rp)", "Ranap K1(Rp)", "Ranap K2(Rp)", "Ranap K3(Rp)",
+            "Hrg.Beli(Rp)", "Hrg.Jual(Rp)", "Ranap K1(Rp)", "Ranap K2(Rp)", "Ranap K3(Rp)",
             "Kelas Utama/BPJS(Rp)", "Ranap VIP(Rp)", "Ranap VVIP(Rp)", "Beli Luar(Rp)",
-            "Jual Bebas(Rp)", "Karyawan(Rp)", "Stok Minimal", "Kode Jenis", "Nama Jenis", "Kapasitas",
+            "Jual Bebas(Rp)", "Karyawan(Rp)", "Stok Minimal", "Stok Normal", "Stok Maximal", "Kode Jenis", "Nama Jenis", "Kapasitas",
             "Kadaluwarsa","Kode I.F.","Industri Farmasi","Kode Kategori","Kategori","Kode Golongan","Golongan"
         };
         tabMode = new DefaultTableModel(null, row) {
@@ -106,7 +125,7 @@ public class DlgBarang extends javax.swing.JDialog {
                 java.lang.Object.class, java.lang.Object.class, java.lang.Double.class, java.lang.Double.class,
                 java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class,
                 java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class,
-                java.lang.Double.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class,
+                java.lang.Double.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class,
                 java.lang.Double.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, 
                 java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
             };
@@ -121,7 +140,7 @@ public class DlgBarang extends javax.swing.JDialog {
         tbDokter.setPreferredScrollableViewportSize(new Dimension(800, 800));
         tbDokter.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
-        for (i = 0; i < 28; i++) {
+        for (i = 0; i < 30; i++) {
             TableColumn column = tbDokter.getColumnModel().getColumn(i);
             if (i == 0) {
                 column.setPreferredWidth(20);
@@ -140,39 +159,47 @@ public class DlgBarang extends javax.swing.JDialog {
             } else if (i == 7) {
                 column.setPreferredWidth(85);
             } else if (i == 8) {
-                column.setPreferredWidth(85);
+                column.setMinWidth(0);
+                column.setMaxWidth(0);
             } else if (i == 9) {
-                column.setPreferredWidth(85);
+                column.setMinWidth(0);
+                column.setMaxWidth(0);
             } else if (i == 10) {
-                column.setPreferredWidth(85);
+                column.setMinWidth(0);
+                column.setMaxWidth(0);
             } else if (i == 11) {
-                column.setPreferredWidth(85);
+                column.setMinWidth(0);
+                column.setMaxWidth(0);
             } else if (i == 12) {
-                column.setPreferredWidth(85);
+                column.setMinWidth(0);
+                column.setMaxWidth(0);
             } else if (i == 13) {
-                column.setPreferredWidth(85);
+                column.setMinWidth(0);
+                column.setMaxWidth(0);
             } else if (i == 14) {
-                column.setPreferredWidth(85);
+                column.setMinWidth(0);
+                column.setMaxWidth(0);
             } else if (i == 15) {
-                column.setPreferredWidth(85);
+                column.setMinWidth(0);
+                column.setMaxWidth(0);
             } else if (i == 16) {
-                column.setPreferredWidth(85);
+                column.setMinWidth(0);
+                column.setMaxWidth(0);
             } else if (i == 17) {
                 column.setPreferredWidth(95);
             } else if (i == 18) {
-                column.setMinWidth(0);
-                column.setMaxWidth(0);
+                column.setPreferredWidth(95);
             } else if (i == 19) {
-                column.setPreferredWidth(120);
+                column.setPreferredWidth(95);
             } else if (i == 20) {
-                column.setPreferredWidth(70);
-            } else if (i == 21) {
-                column.setPreferredWidth(70);
-            } else if (i == 22) {
                 column.setMinWidth(0);
                 column.setMaxWidth(0);
-            } else if (i == 23) {
+            } else if (i == 21) {
                 column.setPreferredWidth(120);
+            } else if (i == 22) {
+                column.setPreferredWidth(70);
+            } else if (i == 23) {
+                column.setPreferredWidth(70);
             } else if (i == 24) {
                 column.setMinWidth(0);
                 column.setMaxWidth(0);
@@ -182,6 +209,11 @@ public class DlgBarang extends javax.swing.JDialog {
                 column.setMinWidth(0);
                 column.setMaxWidth(0);
             } else if (i == 27) {
+                column.setPreferredWidth(120);
+            } else if (i == 28) {
+                column.setMinWidth(0);
+                column.setMaxWidth(0);
+            } else if (i == 29) {
                 column.setPreferredWidth(120);
             }
         }
@@ -204,6 +236,8 @@ public class DlgBarang extends javax.swing.JDialog {
         karyawan.setDocument(new batasInput((byte) 15).getKata(karyawan));
         Kapasitas.setDocument(new batasInput((byte) 15).getKata(Kapasitas));
         stok_minimal.setDocument(new batasInput((byte) 15).getKata(stok_minimal));
+        stok_normal.setDocument(new batasInput((byte) 15).getKata(stok_normal));
+        stok_maximal.setDocument(new batasInput((byte) 15).getKata(stok_maximal));
         kdjns.setDocument(new batasInput((byte) 5).getKata(kdjns));
         kdgolongan.setDocument(new batasInput((byte) 4).getKata(kdgolongan));
         kdkategori.setDocument(new batasInput((byte) 4).getKata(kdkategori));
@@ -557,6 +591,10 @@ public class DlgBarang extends javax.swing.JDialog {
         label23 = new widget.Label();
         label39 = new widget.Label();
         markup = new widget.TextBox();
+        label15 = new widget.Label();
+        stok_maximal = new widget.TextBox();
+        label16 = new widget.Label();
+        stok_normal = new widget.TextBox();
         ChkInput = new widget.CekBox();
 
         Popup.setName("Popup"); // NOI18N
@@ -925,7 +963,7 @@ public class DlgBarang extends javax.swing.JDialog {
         label26.setName("label26"); // NOI18N
         label26.setPreferredSize(new java.awt.Dimension(65, 23));
         FormInput.add(label26);
-        label26.setBounds(530, 160, 130, 23);
+        label26.setBounds(1140, 10, 130, 23);
 
         kelas1.setName("kelas1"); // NOI18N
         kelas1.setPreferredSize(new java.awt.Dimension(207, 23));
@@ -945,13 +983,13 @@ public class DlgBarang extends javax.swing.JDialog {
             }
         });
         FormInput.add(kelas1);
-        kelas1.setBounds(660, 160, 110, 23);
+        kelas1.setBounds(1270, 10, 110, 23);
 
         label28.setText("Hrg Rnp Kelas 2 : Rp.");
         label28.setName("label28"); // NOI18N
         label28.setPreferredSize(new java.awt.Dimension(65, 23));
         FormInput.add(label28);
-        label28.setBounds(530, 190, 130, 23);
+        label28.setBounds(1140, 40, 130, 23);
 
         kelas2.setName("kelas2"); // NOI18N
         kelas2.setPreferredSize(new java.awt.Dimension(207, 23));
@@ -971,7 +1009,7 @@ public class DlgBarang extends javax.swing.JDialog {
             }
         });
         FormInput.add(kelas2);
-        kelas2.setBounds(660, 190, 110, 23);
+        kelas2.setBounds(1270, 40, 110, 23);
 
         label31.setText("Letak Barang :");
         label31.setName("label31"); // NOI18N
@@ -989,11 +1027,11 @@ public class DlgBarang extends javax.swing.JDialog {
         FormInput.add(Letak);
         Letak.setBounds(100, 72, 220, 23);
 
-        label27.setText("Hrg Ralan : Rp.");
+        label27.setText("Harga Jual : Rp.");
         label27.setName("label27"); // NOI18N
         label27.setPreferredSize(new java.awt.Dimension(65, 23));
         FormInput.add(label27);
-        label27.setBounds(550, 130, 108, 23);
+        label27.setBounds(550, 190, 108, 23);
 
         ralan.setName("ralan"); // NOI18N
         ralan.setPreferredSize(new java.awt.Dimension(207, 23));
@@ -1013,7 +1051,7 @@ public class DlgBarang extends javax.swing.JDialog {
             }
         });
         FormInput.add(ralan);
-        ralan.setBounds(660, 130, 110, 23);
+        ralan.setBounds(660, 190, 110, 23);
 
         nmsat.setEditable(false);
         nmsat.setName("nmsat"); // NOI18N
@@ -1115,7 +1153,7 @@ public class DlgBarang extends javax.swing.JDialog {
         label29.setName("label29"); // NOI18N
         label29.setPreferredSize(new java.awt.Dimension(65, 23));
         FormInput.add(label29);
-        label29.setBounds(550, 100, 108, 23);
+        label29.setBounds(550, 160, 108, 23);
 
         beli.setName("beli"); // NOI18N
         beli.setPreferredSize(new java.awt.Dimension(207, 23));
@@ -1135,7 +1173,7 @@ public class DlgBarang extends javax.swing.JDialog {
             }
         });
         FormInput.add(beli);
-        beli.setBounds(660, 100, 110, 23);
+        beli.setBounds(660, 160, 110, 23);
 
         label32.setText("Kapasitas :");
         label32.setName("label32"); // NOI18N
@@ -1336,7 +1374,7 @@ public class DlgBarang extends javax.swing.JDialog {
         karyawan.setBounds(1020, 190, 110, 23);
 
         DTPExpired.setForeground(new java.awt.Color(50, 70, 50));
-        DTPExpired.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "24-05-2018" }));
+        DTPExpired.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "03-08-2018" }));
         DTPExpired.setDisplayFormat("dd-MM-yyyy");
         DTPExpired.setName("DTPExpired"); // NOI18N
         DTPExpired.setOpaque(false);
@@ -1471,7 +1509,7 @@ public class DlgBarang extends javax.swing.JDialog {
         label39.setName("label39"); // NOI18N
         label39.setPreferredSize(new java.awt.Dimension(65, 23));
         FormInput.add(label39);
-        label39.setBounds(550, 70, 108, 23);
+        label39.setBounds(550, 130, 108, 23);
 
         markup.setName("markup"); // NOI18N
         markup.setPreferredSize(new java.awt.Dimension(207, 23));
@@ -1491,7 +1529,59 @@ public class DlgBarang extends javax.swing.JDialog {
             }
         });
         FormInput.add(markup);
-        markup.setBounds(660, 70, 110, 23);
+        markup.setBounds(660, 130, 110, 23);
+
+        label15.setText("Stok Maximal Barang :");
+        label15.setName("label15"); // NOI18N
+        label15.setPreferredSize(new java.awt.Dimension(85, 23));
+        FormInput.add(label15);
+        label15.setBounds(520, 100, 135, 23);
+
+        stok_maximal.setHighlighter(null);
+        stok_maximal.setName("stok_maximal"); // NOI18N
+        stok_maximal.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                stok_maximalMouseMoved(evt);
+            }
+        });
+        stok_maximal.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                stok_maximalMouseExited(evt);
+            }
+        });
+        stok_maximal.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                stok_maximalKeyPressed(evt);
+            }
+        });
+        FormInput.add(stok_maximal);
+        stok_maximal.setBounds(660, 100, 110, 23);
+
+        label16.setText("Pemesanan Stok Normal :");
+        label16.setName("label16"); // NOI18N
+        label16.setPreferredSize(new java.awt.Dimension(85, 23));
+        FormInput.add(label16);
+        label16.setBounds(520, 70, 135, 23);
+
+        stok_normal.setHighlighter(null);
+        stok_normal.setName("stok_normal"); // NOI18N
+        stok_normal.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                stok_normalMouseMoved(evt);
+            }
+        });
+        stok_normal.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                stok_normalMouseExited(evt);
+            }
+        });
+        stok_normal.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                stok_normalKeyPressed(evt);
+            }
+        });
+        FormInput.add(stok_normal);
+        stok_normal.setBounds(660, 70, 110, 23);
 
         PanelInput.add(FormInput, java.awt.BorderLayout.CENTER);
 
@@ -1606,8 +1696,8 @@ public class DlgBarang extends javax.swing.JDialog {
         } else if (beli.getText().trim().equals("")) {
             Valid.textKosong(beli, "Harga Beli");
         } else if (ralan.getText().trim().equals("")) {
-            Valid.textKosong(ralan, "Harga Ralan");
-        } else if (kelas1.getText().trim().equals("")) {
+            Valid.textKosong(ralan, "Harga Jual");
+/*        } else if (kelas1.getText().trim().equals("")) {
             Valid.textKosong(kelas1, "Harga Ranap Kelas 1");
         } else if (kelas2.getText().trim().equals("")) {
             Valid.textKosong(kelas2, "Harga Ranap Kelas 2");
@@ -1624,7 +1714,7 @@ public class DlgBarang extends javax.swing.JDialog {
         } else if (jualbebas.getText().trim().equals("")) {
             Valid.textKosong(jualbebas, "Harga Jual Obat Bebas");
         } else if (karyawan.getText().trim().equals("")) {
-            Valid.textKosong(karyawan, "Harga Karyawan");
+            Valid.textKosong(karyawan, "Harga Karyawan");*/
         } else if (kdsat.getText().trim().equals("") || nmsat.getText().trim().equals("")) {
             Valid.textKosong(kdsat, "Satuan");
         } else if (kdjns.getText().trim().equals("") || nmjns.getText().trim().equals("")) {
@@ -1635,6 +1725,10 @@ public class DlgBarang extends javax.swing.JDialog {
             Valid.textKosong(kdgolongan, "Golongan");
         } else if (stok_minimal.getText().trim().equals("")) {
             Valid.textKosong(stok_minimal, "Stok Minimal");
+        } else if (stok_normal.getText().trim().equals("")) {
+            Valid.textKosong(stok_normal, "Pemesanan Stok Normal");
+        } else if (stok_maximal.getText().trim().equals("")) {
+            Valid.textKosong(stok_maximal, "Stok Maximal");
         } else if (Kapasitas.getText().trim().equals("")) {
             Valid.textKosong(Kapasitas, "Kapasitas");
         }  else if (KdIF.getText().trim().equals("") || NmIF.getText().trim().equals("")) {
@@ -1646,13 +1740,13 @@ public class DlgBarang extends javax.swing.JDialog {
                 tanggal = "0000-00-00";
             }
             Valid.editTable(tabMode, "databarang", "kode_brng", "?", "nama_brng=?,kode_brng=?,kapasitas=?,kode_sat=?,letak_barang=?,"
-                    + "h_beli=?,ralan=?,kelas1=?,kelas2=?,stokminimal=?,kdjns=?,kelas3=?,utama=?,vip=?,vvip=?,beliluar=?,jualbebas=?,karyawan=?,expire=?,kode_industri=?,kode_kategori=?,kode_golongan=?", 23, new String[]{
+                    + "h_beli=?,ralan=?,kelas1=?,kelas2=?,stokminimal=?,stoknormal=?,stokmaximal=?,kdjns=?,kelas3=?,utama=?,vip=?,vvip=?,beliluar=?,jualbebas=?,karyawan=?,expire=?,kode_industri=?,kode_kategori=?,kode_golongan=? ", 25, new String[]{
                         Nm.getText(), Kd.getText(), Kapasitas.getText(), kdsat.getText(), Letak.getText(), beli.getText(), ralan.getText().replaceAll(",", ""),
-                        kelas1.getText().replaceAll(",", ""), kelas2.getText().replaceAll(",", ""), stok_minimal.getText(), kdjns.getText(), 
+                        kelas1.getText().replaceAll(",", ""), kelas2.getText().replaceAll(",", ""), stok_minimal.getText(), stok_normal.getText(), stok_maximal.getText(), kdjns.getText(), 
                         kelas3.getText().replaceAll(",", ""), utama.getText().replaceAll(",", ""), kelasvip.getText().replaceAll(",", ""), kelasvvip.getText().replaceAll(",", ""),
                         beliluar.getText().replaceAll(",", ""), jualbebas.getText().replaceAll(",", ""), karyawan.getText().replaceAll(",", ""), 
                         tanggal,KdIF.getText(),kdkategori.getText(),kdgolongan.getText(),
-                        tbDokter.getValueAt(tbDokter.getSelectedRow(), 1).toString(),
+                        tbDokter.getValueAt(tbDokter.getSelectedRow(), 1).toString()
                     });
             if (tabMode.getRowCount() != 0) {
                 tampil();
@@ -1691,7 +1785,7 @@ public class DlgBarang extends javax.swing.JDialog {
                     + " databarang.utama,databarang.vip,databarang.vvip,databarang.beliluar,databarang.jualbebas,"
                     + " databarang.karyawan,databarang.stokminimal, databarang.kdjns,"
                     + " jenis.nama,kapasitas,databarang.expire,databarang.kode_industri,industrifarmasi.nama_industri, "
-                    + " databarang.kode_kategori,kategori_barang.nama as kategori,databarang.kode_golongan,golongan_barang.nama as golongan "
+                    + " databarang.kode_kategori,kategori_barang.nama as kategori,databarang.kode_golongan,golongan_barang.nama as golongan,databarang.stokmaximal,databarang.stoknormal "
                     + " from databarang inner join kodesatuan inner join jenis inner join industrifarmasi inner join golongan_barang inner join kategori_barang "
                     + " on databarang.kode_sat=kodesatuan.kode_sat and databarang.kdjns=jenis.kdjns "
                     + " and databarang.kode_golongan=golongan_barang.kode and databarang.kode_kategori=kategori_barang.kode "
@@ -1758,8 +1852,8 @@ public class DlgBarang extends javax.swing.JDialog {
         } else if (beli.getText().trim().equals("")) {
             Valid.textKosong(beli, "Harga Beli");
         } else if (ralan.getText().trim().equals("")) {
-            Valid.textKosong(ralan, "Harga Ralan");
-        } else if (kelas1.getText().trim().equals("")) {
+            Valid.textKosong(ralan, "Harga Jual");
+        /*} else if (kelas1.getText().trim().equals("")) {
             Valid.textKosong(kelas1, "Harga Ranap Kelas 1");
         } else if (kelas2.getText().trim().equals("")) {
             Valid.textKosong(kelas2, "Harga Ranap Kelas 2");
@@ -1776,7 +1870,7 @@ public class DlgBarang extends javax.swing.JDialog {
         } else if (jualbebas.getText().trim().equals("")) {
             Valid.textKosong(jualbebas, "Harga Jual Obat Bebas");
         } else if (karyawan.getText().trim().equals("")) {
-            Valid.textKosong(karyawan, "Harga Karyawan");
+            Valid.textKosong(karyawan, "Harga Karyawan");*/
         } else if (kdsat.getText().trim().equals("") || nmsat.getText().trim().equals("")) {
             Valid.textKosong(kdsat, "Satuan");
         } else if (kdjns.getText().trim().equals("") || nmjns.getText().trim().equals("")) {
@@ -1787,6 +1881,10 @@ public class DlgBarang extends javax.swing.JDialog {
             Valid.textKosong(kdgolongan, "Golongan");
         } else if (stok_minimal.getText().trim().equals("")) {
             Valid.textKosong(stok_minimal, "Stok Minimal");
+        } else if (stok_normal.getText().trim().equals("")) {
+            Valid.textKosong(stok_normal, "Pemesanan Stok Normal");
+        } else if (stok_maximal.getText().trim().equals("")) {
+            Valid.textKosong(stok_maximal, "Stok Maximal");
         } else if (Kapasitas.getText().trim().equals("")) {
             Valid.textKosong(Kapasitas, "Kapasitas");
         } else if (KdIF.getText().trim().equals("") || NmIF.getText().trim().equals("")) {
@@ -1797,12 +1895,12 @@ public class DlgBarang extends javax.swing.JDialog {
             } else {
                 tanggal = "0000-00-00";
             }
-            Sequel.menyimpan("databarang", "?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?", "Kode Barang", 23, new String[]{
+            Sequel.menyimpan("databarang", "?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?", "Kode Barang", 25, new String[]{
                 Kd.getText(), Nm.getText(), kdsat.getText(), Letak.getText(), beli.getText(), ralan.getText().replaceAll(",", ""),
                 kelas1.getText().replaceAll(",", ""), kelas2.getText().replaceAll(",", ""), kelas3.getText().replaceAll(",", ""),
                 utama.getText().replaceAll(",", ""), kelasvip.getText().replaceAll(",", ""), kelasvvip.getText().replaceAll(",", ""),
                 beliluar.getText().replaceAll(",", ""), jualbebas.getText().replaceAll(",", ""), karyawan.getText().replaceAll(",", ""),
-                stok_minimal.getText(), kdjns.getText(), Kapasitas.getText(), tanggal,"1",KdIF.getText(),kdkategori.getText(),kdgolongan.getText()
+                stok_minimal.getText(), kdjns.getText(), Kapasitas.getText(), tanggal,"1",KdIF.getText(),kdkategori.getText(),kdgolongan.getText(),stok_maximal.getText(),stok_normal.getText()
             });
             tampil();
             emptTeks();
@@ -2260,6 +2358,30 @@ private void KapasitasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         }
     }//GEN-LAST:event_markupKeyPressed
 
+    private void stok_maximalMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_stok_maximalMouseMoved
+        // TODO add your handling code here:
+    }//GEN-LAST:event_stok_maximalMouseMoved
+
+    private void stok_maximalMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_stok_maximalMouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_stok_maximalMouseExited
+
+    private void stok_maximalKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_stok_maximalKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_stok_maximalKeyPressed
+
+    private void stok_normalMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_stok_normalMouseMoved
+        // TODO add your handling code here:
+    }//GEN-LAST:event_stok_normalMouseMoved
+
+    private void stok_normalMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_stok_normalMouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_stok_normalMouseExited
+
+    private void stok_normalKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_stok_normalKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_stok_normalKeyPressed
+
     /**
      * @param args the command line arguments
      */
@@ -2323,6 +2445,8 @@ private void KapasitasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
     private widget.Label label10;
     private widget.Label label12;
     private widget.Label label14;
+    private widget.Label label15;
+    private widget.Label label16;
     private widget.Label label18;
     private widget.Label label19;
     private widget.Label label20;
@@ -2357,7 +2481,9 @@ private void KapasitasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
     private javax.swing.JMenuItem ppStok2;
     private widget.TextBox ralan;
     private widget.ScrollPane scrollPane1;
+    private widget.TextBox stok_maximal;
     private widget.TextBox stok_minimal;
+    private widget.TextBox stok_normal;
     private widget.Table tbDokter;
     private widget.TextBox utama;
     // End of variables declaration//GEN-END:variables
@@ -2398,6 +2524,8 @@ private void KapasitasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                         rs.getDouble("jualbebas"),
                         rs.getDouble("karyawan"),
                         rs.getString("stokminimal"),
+                        rs.getString("stoknormal"),
+                        rs.getString("stokmaximal"),
                         rs.getString("kdjns"),
                         rs.getString("nama"),
                         rs.getDouble("kapasitas"),
@@ -2463,6 +2591,8 @@ private void KapasitasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                         rs.getDouble("jualbebas"),
                         rs.getDouble("karyawan"),
                         rs.getString("stokminimal"),
+                        rs.getString("stoknormal"),
+                        rs.getString("stokmaximal"),
                         rs.getString("kdjns"),
                         rs.getString("nama"),
                         rs.getDouble("kapasitas"),
@@ -2490,7 +2620,7 @@ private void KapasitasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                                     stokgudang = rs3.getDouble(1);
                                     totalstok = totalstok + rs3.getDouble(1);
                                 }
-                                tabMode.addRow(new Object[]{false, "","    "+rs2.getString(2),": " + stokgudang, "", "", null, null, null, null, null, null, null, null, null, null, null,null,null, null,null,null,null,null,null,null});
+                                tabMode.addRow(new Object[]{false, "","    "+rs2.getString(2),": " + stokgudang, "", "", null, null, null, null, null, null, null, null, null, null, null, null,null,null, null,null,null,null,null,null,null});
                             } catch (Exception e) {
                                 System.out.println("Notifikasi : " + e);
                             } finally{
@@ -2503,7 +2633,7 @@ private void KapasitasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                                 }
                             }
                         }
-                        tabMode.addRow(new Object[]{false, "", "  Total Stok", ": " + totalstok, "", "", null, null, null, null, null, null, null, null, null, null, null, null,null, null,null,null,null,null,null,null});
+                        tabMode.addRow(new Object[]{false, "", "  Total Stok", ": " + totalstok, "", "", null, null, null, null, null, null, null, null, null, null, null, null, null,null, null,null,null,null,null,null,null});
                     } catch (Exception e) {
                         System.out.println("Notifikasi : " + e);
                     } finally{
@@ -2568,6 +2698,8 @@ private void KapasitasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                         rs.getDouble("jualbebas"),
                         rs.getDouble("karyawan"),
                         rs.getString("stokminimal"),
+                        rs.getString("stoknormal"),
+                        rs.getString("stokmaximal"),
                         rs.getString("kdjns"),
                         rs.getString("nama"),
                         rs.getDouble("kapasitas"),
@@ -2588,7 +2720,7 @@ private void KapasitasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                         if (rs3.next()) {
                             stokgudang = rs3.getDouble(1);
                         }
-                        tabMode.addRow(new Object[]{false, "","    "+nmlokasi, ": " + stokgudang, "", "", null, null, null, null, null, null, null, null, null, null, null,null,null, null,null,null,null,null,null,null});
+                        tabMode.addRow(new Object[]{false, "","    "+nmlokasi, ": " + stokgudang, "", "", null, null, null, null, null, null, null, null, null, null, null, null,null,null, null,null,null,null,null,null,null});
                     } catch (Exception e) {
                         System.out.println("Notifikasi : " + e);
                     } finally{
@@ -2630,7 +2762,7 @@ private void KapasitasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                         + " databarang.utama,databarang.vip,databarang.vvip,databarang.beliluar,databarang.jualbebas,"
                         + " databarang.karyawan,databarang.stokminimal, databarang.kdjns,"
                         + " jenis.nama,kapasitas,databarang.expire,databarang.kode_industri,industrifarmasi.nama_industri, "
-                        + " databarang.kode_kategori,kategori_barang.nama as kategori,databarang.kode_golongan,golongan_barang.nama as golongan  "
+                        + " databarang.kode_kategori,kategori_barang.nama as kategori,databarang.kode_golongan,golongan_barang.nama as golongan,databarang.stokmaximal,databarang.stoknormal  "
                         + " from databarang inner join kodesatuan inner join jenis inner join detail_pemberian_obat inner join industrifarmasi inner join golongan_barang inner join kategori_barang"
                         + " on databarang.kode_sat=kodesatuan.kode_sat and databarang.kdjns=jenis.kdjns and "
                         + " databarang.kode_golongan=golongan_barang.kode and databarang.kode_kategori=kategori_barang.kode and "
@@ -2659,6 +2791,8 @@ private void KapasitasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                             rs.getDouble("jualbebas"),
                             rs.getDouble("karyawan"),
                             rs.getString("stokminimal"),
+                            rs.getString("stoknormal"),
+                            rs.getString("stokmaximal"),
                             rs.getString("kdjns"),
                             rs.getString("nama"),
                             rs.getDouble("kapasitas"),
@@ -2713,6 +2847,8 @@ private void KapasitasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         karyawan.setText("0");
         Kapasitas.setText("0");
         stok_minimal.setText("0");
+        stok_normal.setText("0");
+        stok_maximal.setText("0");
         kdjns.setText("");
         nmjns.setText("");
         kdkategori.setText("");
@@ -2745,23 +2881,25 @@ private void KapasitasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
             jualbebas.setText(Double.toString(Double.parseDouble(tbDokter.getValueAt(row, 15).toString())));
             karyawan.setText(Double.toString(Double.parseDouble(tbDokter.getValueAt(row, 16).toString())));
             stok_minimal.setText(tbDokter.getValueAt(row, 17).toString());
-            kdjns.setText(tbDokter.getValueAt(row, 18).toString());
-            nmjns.setText(tbDokter.getValueAt(row, 19).toString());
-            KdIF.setText(tbDokter.getValueAt(row, 22).toString());
-            NmIF.setText(tbDokter.getValueAt(row, 23).toString());
-            kdkategori.setText(tbDokter.getValueAt(row, 24).toString());
-            nmkategori.setText(tbDokter.getValueAt(row, 25).toString());
-            kdgolongan.setText(tbDokter.getValueAt(row, 26).toString());
-            nmgolongan.setText(tbDokter.getValueAt(row, 27).toString());
-            Kapasitas.setText(Valid.SetAngka2(Double.parseDouble(tbDokter.getValueAt(row, 20).toString())));
+            stok_normal.setText(tbDokter.getValueAt(row, 18).toString());
+            stok_maximal.setText(tbDokter.getValueAt(row, 19).toString());
+            kdjns.setText(tbDokter.getValueAt(row, 20).toString());
+            nmjns.setText(tbDokter.getValueAt(row, 21).toString());
+            KdIF.setText(tbDokter.getValueAt(row, 24).toString());
+            NmIF.setText(tbDokter.getValueAt(row, 25).toString());
+            kdkategori.setText(tbDokter.getValueAt(row, 26).toString());
+            nmkategori.setText(tbDokter.getValueAt(row, 27).toString());
+            kdgolongan.setText(tbDokter.getValueAt(row, 28).toString());
+            nmgolongan.setText(tbDokter.getValueAt(row, 29).toString());
+            Kapasitas.setText(Valid.SetAngka2(Double.parseDouble(tbDokter.getValueAt(row, 22).toString())));
             ChkKadaluarsa.setSelected(false);
             DTPExpired.setDate(new Date());
-            if(tbDokter.getValueAt(row, 21).toString().equals("")||(tbDokter.getValueAt(row, 21).toString().length()==0)){
+            if(tbDokter.getValueAt(row, 22).toString().equals("")||(tbDokter.getValueAt(row, 23).toString().length()==0)){
                 ChkKadaluarsa.setSelected(false);
                 DTPExpired.setDate(new Date());
             }else{
                 ChkKadaluarsa.setSelected(true);
-                Valid.SetTgl(DTPExpired, tbDokter.getValueAt(row, 21).toString());
+                Valid.SetTgl(DTPExpired, tbDokter.getValueAt(row, 23).toString());
             }
         }
     }
@@ -2775,16 +2913,16 @@ private void KapasitasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
             rs = koneksi.prepareStatement("select * from setpenjualan where kdjns='"+kdjns.getText()+"'").executeQuery();
             while (rs.next()) {
                 if (!beli.getText().equals("")) {
-                    ralan.setText(Double.toString(Valid.roundUp(Double.parseDouble(beli.getText()) + (Double.parseDouble(beli.getText()) * (rs.getDouble("ralan") / 100)),100)));
-                    kelas1.setText(Double.toString(Valid.roundUp(Double.parseDouble(beli.getText()) + (Double.parseDouble(beli.getText()) * (rs.getDouble("kelas1") / 100)),100)));
-                    kelas2.setText(Double.toString(Valid.roundUp(Double.parseDouble(beli.getText()) + (Double.parseDouble(beli.getText()) * (rs.getDouble("kelas2") / 100)),100)));
-                    kelas3.setText(Double.toString(Valid.roundUp(Double.parseDouble(beli.getText()) + (Double.parseDouble(beli.getText()) * (rs.getDouble("kelas3") / 100)),100)));
-                    utama.setText(Double.toString(Valid.roundUp(Double.parseDouble(beli.getText()) + (Double.parseDouble(beli.getText()) * (rs.getDouble("utama") / 100)),100)));
-                    kelasvip.setText(Double.toString(Valid.roundUp(Double.parseDouble(beli.getText()) + (Double.parseDouble(beli.getText()) * (rs.getDouble("vip") / 100)),100)));
-                    kelasvvip.setText(Double.toString(Valid.roundUp(Double.parseDouble(beli.getText()) + (Double.parseDouble(beli.getText()) * (rs.getDouble("vvip") / 100)),100)));
-                    beliluar.setText(Double.toString(Valid.roundUp(Double.parseDouble(beli.getText()) + (Double.parseDouble(beli.getText()) * (rs.getDouble("beliluar") / 100)),100)));
-                    jualbebas.setText(Double.toString(Valid.roundUp(Double.parseDouble(beli.getText()) + (Double.parseDouble(beli.getText()) * (rs.getDouble("jualbebas") / 100)),100)));
-                    karyawan.setText(Double.toString(Valid.roundUp(Double.parseDouble(beli.getText()) + (Double.parseDouble(beli.getText()) * (rs.getDouble("karyawan") / 100)),100)));
+                    ralan.setText(Double.toString(Valid.roundUp(Double.parseDouble(beli.getText()) + (Double.parseDouble(beli.getText()) * (rs.getDouble("ralan") / 100)),10)));
+                    kelas1.setText(Double.toString(Valid.roundUp(Double.parseDouble(beli.getText()) + (Double.parseDouble(beli.getText()) * (rs.getDouble("kelas1") / 100)),10)));
+                    kelas2.setText(Double.toString(Valid.roundUp(Double.parseDouble(beli.getText()) + (Double.parseDouble(beli.getText()) * (rs.getDouble("kelas2") / 100)),10)));
+                    kelas3.setText(Double.toString(Valid.roundUp(Double.parseDouble(beli.getText()) + (Double.parseDouble(beli.getText()) * (rs.getDouble("kelas3") / 100)),10)));
+                    utama.setText(Double.toString(Valid.roundUp(Double.parseDouble(beli.getText()) + (Double.parseDouble(beli.getText()) * (rs.getDouble("utama") / 100)),10)));
+                    kelasvip.setText(Double.toString(Valid.roundUp(Double.parseDouble(beli.getText()) + (Double.parseDouble(beli.getText()) * (rs.getDouble("vip") / 100)),10)));
+                    kelasvvip.setText(Double.toString(Valid.roundUp(Double.parseDouble(beli.getText()) + (Double.parseDouble(beli.getText()) * (rs.getDouble("vvip") / 100)),10)));
+                    beliluar.setText(Double.toString(Valid.roundUp(Double.parseDouble(beli.getText()) + (Double.parseDouble(beli.getText()) * (rs.getDouble("beliluar") / 100)),10)));
+                    jualbebas.setText(Double.toString(Valid.roundUp(Double.parseDouble(beli.getText()) + (Double.parseDouble(beli.getText()) * (rs.getDouble("jualbebas") / 100)),10)));
+                    karyawan.setText(Double.toString(Valid.roundUp(Double.parseDouble(beli.getText()) + (Double.parseDouble(beli.getText()) * (rs.getDouble("karyawan") / 100)),10)));
                 }
             }
             //rs.close();

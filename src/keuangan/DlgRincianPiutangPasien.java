@@ -171,11 +171,14 @@ public final class DlgRincianPiutangPasien extends javax.swing.JDialog {
             @Override
             public void windowClosed(WindowEvent e) {
                 if(cetakinvoice.getTable().getSelectedRow()!= -1){
-                    kdpenjab.setText("");
                     nmpenjab.setText(cetakinvoice.getTable().getValueAt(cetakinvoice.getTable().getSelectedRow(),5).toString());
+                    String kodepenjab=Sequel.cariIsi("select kd_pj from penjab where png_jawab=?", nmpenjab.getText());                    
+                    kdpenjab.setText(kodepenjab);
                     Valid.SetTgl(Tgl1,cetakinvoice.getTable().getValueAt(cetakinvoice.getTable().getSelectedRow(),3).toString());
                     Valid.SetTgl(Tgl2,cetakinvoice.getTable().getValueAt(cetakinvoice.getTable().getSelectedRow(),4).toString());
                     TCari.setText(cetakinvoice.getTable().getValueAt(cetakinvoice.getTable().getSelectedRow(),6).toString());
+                    biaya = cetakinvoice.getTable().getValueAt(cetakinvoice.getTable().getSelectedRow(),2).toString();
+                    BtnCariActionPerformed(null);
                     //tampil();
                 }      
                 kdpenjab.requestFocus();
@@ -725,7 +728,11 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
             JOptionPane.showMessageDialog(null,"Maaf, pilih terlebih dahulu cara bayarnya!!!!");
             BtnSeek2.requestFocus();
         }else if(tabMode.getRowCount()!=0){
-            biaya = (String)JOptionPane.showInputDialog(null,"Masukkan No Invoice Penagihan","No Invoice",JOptionPane.QUESTION_MESSAGE);
+            if(biaya != null && (!"".equals(biaya)))
+                { biaya = (String)JOptionPane.showInputDialog("Masukkan No Invoice Penagihan",biaya);}
+            else
+                { biaya = (String)JOptionPane.showInputDialog(null,"Masukkan No Invoice Penagihan","No Invoice",JOptionPane.QUESTION_MESSAGE);}
+            
             if(biaya != null && (!"".equals(biaya)))
             {
                 DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
@@ -749,6 +756,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
 
                 Valid.MyReport("rptInvoicePiutangAsuransi.jrxml","report","::[ Invoice Piutang ]::","select * from penjab",param);
             }
+            biaya = null;
         }
         this.setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_mnInvoiceActionPerformed

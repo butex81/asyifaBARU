@@ -2199,7 +2199,8 @@ public class DlgBilingRalan extends javax.swing.JDialog {
                 this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                 try{
                     koneksi.setAutoCommit(false);
-                    Sequel.queryu2("delete from temporary_bayar_ralan where temp9='"+var.getkode()+"'"); 
+                    // Sequel.queryu2("delete from temporary_bayar_ralan where temp9='"+var.getkode()+"'"); 
+                    Sequel.queryu2("delete from temporary_bayar_ralan"); 
                     for(i=0;i<tabModeRwJlDr.getRowCount();i++){  
                         if(tabModeRwJlDr.getValueAt(i,0).toString().equals("true")){
                             biaya="";

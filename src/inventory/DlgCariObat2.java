@@ -661,7 +661,7 @@ public final class DlgCariObat2 extends javax.swing.JDialog {
 
         DTPTgl.setEditable(false);
         DTPTgl.setForeground(new java.awt.Color(50, 70, 50));
-        DTPTgl.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "24-05-2018" }));
+        DTPTgl.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "11-07-2018" }));
         DTPTgl.setDisplayFormat("dd-MM-yyyy");
         DTPTgl.setName("DTPTgl"); // NOI18N
         DTPTgl.setOpaque(false);
@@ -751,7 +751,6 @@ public final class DlgCariObat2 extends javax.swing.JDialog {
 
         ChkNoResep.setBorder(null);
         ChkNoResep.setForeground(new java.awt.Color(153, 0, 51));
-        ChkNoResep.setSelected(true);
         ChkNoResep.setText("No.Resep   ");
         ChkNoResep.setBorderPainted(true);
         ChkNoResep.setBorderPaintedFlat(true);

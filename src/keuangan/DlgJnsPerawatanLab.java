@@ -653,7 +653,7 @@ public final class DlgJnsPerawatanLab extends javax.swing.JDialog {
         jLabel5.setBounds(300, 162, 130, 23);
 
         Kelas.setForeground(new java.awt.Color(153, 0, 51));
-        Kelas.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-", "Ralan", "Kelas 1", "Kelas 2", "Kelas 3", "Kelas Utama", "Kelas VIP", "Kelas VVIP" }));
+        Kelas.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-", "Ralan", "Kelas 1", "Kelas 2", "Kelas 3", "Kelas Utama", "Kelas VIP", "Kelas VVIP", " " }));
         Kelas.setName("Kelas"); // NOI18N
         Kelas.setOpaque(false);
         Kelas.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -793,7 +793,7 @@ public final class DlgJnsPerawatanLab extends javax.swing.JDialog {
         }else if(Menejemen.getText().trim().equals("")){
             Valid.textKosong(Menejemen,"Menejemen");
         }else{
-            Sequel.mengedit("jns_perawatan_lab","kd_jenis_prw=?","kd_jenis_prw=?,nm_perawatan=?,bagian_rs=?,tarif_tindakan_petugas=?,total_byr=?,kd_pj=?,tarif_tindakan_dokter=?,tarif_perujuk=?,bhp=?,kso=?,menejemen=?,kelas=?",13,new String[]{
+            Sequel.mengedit("jns_perawatan_lab","kd_jenis_prw=?","kd_jenis_prw=?,nm_perawatan=?,bagian_rs=?,tarif_tindakan_petugas=?,total_byr=?,kd_pj=?,tarif_tindakan_dokter=?,tarif_perujuk=?,bhp=?,kso=?,menejemen=?,jnskelas=?",13,new String[]{
                 TKd.getText(),TNm.getText(),BagianRs.getText(),JMLaborat.getText(),TotalBiaya.getText(),kdpnj.getText(),JMDokter.getText(),JMPerujuk.getText(),Bhp.getText(),
                 KSO.getText(),Menejemen.getText(),Kelas.getSelectedItem().toString(),tbJnsPerawatan.getValueAt(tbJnsPerawatan.getSelectedRow(),1).toString()
             });
@@ -845,7 +845,7 @@ public final class DlgJnsPerawatanLab extends javax.swing.JDialog {
                     "from jns_perawatan_lab inner join penjab on penjab.kd_pj=jns_perawatan_lab.kd_pj where "+
                     " jns_perawatan_lab.status='1' and jns_perawatan_lab.kd_jenis_prw like '%"+TCari.getText().trim()+"%' or  "+
                     " jns_perawatan_lab.status='1' and jns_perawatan_lab.nm_perawatan like '%"+TCari.getText().trim()+"%' or "+
-                    " jns_perawatan_lab.status='1' and jns_perawatan_lab.kelas like '%"+TCari.getText().trim()+"%' or "+
+                    " jns_perawatan_lab.status='1' and jns_perawatan_lab.jnskelas like '%"+TCari.getText().trim()+"%' or "+
                     " jns_perawatan_lab.status='1' and penjab.png_jawab like '%"+TCari.getText().trim()+"%' "+
                     "order by jns_perawatan_lab.kd_jenis_prw",param);   
         }
@@ -1179,10 +1179,10 @@ private void btnPjActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:e
                         "select jns_perawatan_lab.kd_jenis_prw,jns_perawatan_lab.nm_perawatan,jns_perawatan_lab.bagian_rs,jns_perawatan_lab.bhp,"+
                         "jns_perawatan_lab.tarif_perujuk,jns_perawatan_lab.tarif_tindakan_dokter,jns_perawatan_lab.tarif_tindakan_petugas,"+
                         "jns_perawatan_lab.kso,jns_perawatan_lab.menejemen,jns_perawatan_lab.total_byr, "+
-                        "penjab.png_jawab,jns_perawatan_lab.kelas from jns_perawatan_lab inner join penjab on penjab.kd_pj=jns_perawatan_lab.kd_pj where "+
+                        "penjab.png_jawab,jns_perawatan_lab.jnskelas from jns_perawatan_lab inner join penjab on penjab.kd_pj=jns_perawatan_lab.kd_pj where "+
                         " jns_perawatan_lab.status='1' and jns_perawatan_lab.kd_jenis_prw like ? or  "+
                         " jns_perawatan_lab.status='1' and jns_perawatan_lab.nm_perawatan like ? or "+
-                        " jns_perawatan_lab.status='1' and jns_perawatan_lab.kelas like ? or "+
+                        " jns_perawatan_lab.status='1' and jns_perawatan_lab.jnskelas like ? or "+
                         " jns_perawatan_lab.status='1' and penjab.png_jawab like ? "+
                         "order by jns_perawatan_lab.kd_jenis_prw");
             try {    

@@ -68,7 +68,7 @@ public final class DlgPeriksaLaboratorium extends javax.swing.JDialog {
             Utang_Jasa_Medik_Dokter_Laborat_Ranap="", Beban_Jasa_Medik_Petugas_Laborat_Ranap="", 
             Utang_Jasa_Medik_Petugas_Laborat_Ranap="", Beban_Kso_Laborat_Ranap="", Utang_Kso_Laborat_Ranap="", 
             HPP_Persediaan_Laborat_Rawat_inap="", Persediaan_BHP_Laborat_Rawat_Inap="",norawatibu="";
-    private String posisilayanan;
+    
 
     /** Creates new form DlgPerawatan
      * @param parent
@@ -980,7 +980,7 @@ public final class DlgPeriksaLaboratorium extends javax.swing.JDialog {
             Valid.textKosong(Pemeriksaan,"Data Pemeriksaan");
         }else{
             if(var.getkode().equals("Admin Utama")){
-                int reply = JOptionPane.showConfirmDialog(rootPane,"udah bener belum data yang mau disimpan..??","Konfirmasi",JOptionPane.YES_NO_OPTION);
+                int reply = JOptionPane.showConfirmDialog(rootPane,"Udah bener belum data yang mau disimpan..??","Konfirmasi",JOptionPane.YES_NO_OPTION);
                 if (reply == JOptionPane.YES_OPTION) {
                     ChkJln.setSelected(false);
                     try {                    
@@ -1123,7 +1123,7 @@ public final class DlgPeriksaLaboratorium extends javax.swing.JDialog {
                     JOptionPane.showMessageDialog(rootPane,"Data billing sudah terverifikasi, data tidak boleh dihapus.\nSilahkan hubungi bagian kasir/keuangan ..!!");
                     Pemeriksaan.requestFocus();
                 }else{
-                    int reply = JOptionPane.showConfirmDialog(rootPane,"udah bener belum data yang mau disimpan..??","Konfirmasi",JOptionPane.YES_NO_OPTION);
+                    int reply = JOptionPane.showConfirmDialog(rootPane,"Udah bener belum data yang mau disimpan..??","Konfirmasi",JOptionPane.YES_NO_OPTION);
                     if (reply == JOptionPane.YES_OPTION) {
                         ChkJln.setSelected(false);
                         try {               
@@ -1996,10 +1996,6 @@ private void BtnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
             }                
         }else if(status.equals("Ralan")){
             kelas="Ralan";
-        }else if(status.equals("Kelas Utama")){
-            kelas="VIP";
-        }else{
-            kelas="VIP";
         }
     }
 
@@ -2077,7 +2073,6 @@ private void BtnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     public void setNoRm(String norwt,String posisi) {
         TNoRw.setText(norwt);
         this.status=posisi;
-        posisilayanan = posisi;
         try {
             pssetpj=koneksi.prepareStatement("select * from set_pjlab");
             try {                              
@@ -2188,39 +2183,15 @@ private void BtnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
             for(i=0;i<jml;i++){
                 tabMode2.addRow(new Object[] {pilih[i],kode[i],nama[i],total[i],bagian_rs[i],bhp[i],tarif_perujuk[i],tarif_tindakan_dokter[i],tarif_tindakan_petugas[i],kso[i],menejemen[i]});
             }       
-            
-            if (null == posisilayanan){
-                posisilayanan = "VIP";
-            } else switch (posisilayanan) {
-                case "Ranap":
-                    String kelas=Sequel.cariIsi(
-                            "select kamar.kelas from kamar inner join kamar_inap on kamar.kd_kamar=kamar_inap.kd_kamar "+
-                                    "where no_rawat=? and stts_pulang='-' order by STR_TO_DATE(concat(kamar_inap.tgl_masuk,' ',jam_masuk),'%Y-%m-%d %H:%i:%s') desc limit 1",TNoRw.getText());
-                    //posisilayanan = kelas;
-                    if ("Kelas Utama".equals(kelas)){
-                        posisilayanan = "VIP";
-                    } else {
-                        posisilayanan = kelas;
-                    }
-                    break;    
-                case "Ralan":
-                    posisilayanan = "Ralan";
-                    break;
-                default:
-                    posisilayanan = "VIP";
-                    break;
-            }
         
             pstindakan=koneksi.prepareStatement(
                     "select jns_perawatan_lab.kd_jenis_prw,jns_perawatan_lab.nm_perawatan,jns_perawatan_lab.total_byr,"+
                     "jns_perawatan_lab.bagian_rs,jns_perawatan_lab.bhp,jns_perawatan_lab.tarif_perujuk,"+
                     "jns_perawatan_lab.tarif_tindakan_dokter,jns_perawatan_lab.tarif_tindakan_petugas,"+
-                    "jns_perawatan_lab.kso,jns_perawatan_lab.menejemen,penjab.png_jawab,jns_perawatan_lab.jnskelas "+
+                    "jns_perawatan_lab.kso,jns_perawatan_lab.menejemen,penjab.png_jawab "+
                     "from jns_perawatan_lab inner join penjab on penjab.kd_pj=jns_perawatan_lab.kd_pj where "+
-//                    " jns_perawatan_lab.status='1' and (jns_perawatan_lab.kd_pj=? or jns_perawatan_lab.kd_pj='-') and jns_perawatan_lab.kd_jenis_prw like ? or "+
-//                    " jns_perawatan_lab.status='1' and (jns_perawatan_lab.kd_pj=? or jns_perawatan_lab.kd_pj='-') and jns_perawatan_lab.nm_perawatan like ? and jns_perawatan_lab.jnskelas='"+posisilayanan+"' "+
-                    "jns_perawatan_lab.jnskelas='"+posisilayanan+"' and "+
-                    " jns_perawatan_lab.status='1' and (jns_perawatan_lab.kd_pj=? or jns_perawatan_lab.kd_pj='-') and jns_perawatan_lab.nm_perawatan like ? "+        
+                    " jns_perawatan_lab.status='1' and (jns_perawatan_lab.kd_pj=? or jns_perawatan_lab.kd_pj='-') and jns_perawatan_lab.kd_jenis_prw like ? or "+
+                    " jns_perawatan_lab.status='1' and (jns_perawatan_lab.kd_pj=? or jns_perawatan_lab.kd_pj='-') and jns_perawatan_lab.nm_perawatan like ? "+
                     "order by jns_perawatan_lab.kd_jenis_prw");
             pstindakan2=koneksi.prepareStatement(
                     "select jns_perawatan_lab.kd_jenis_prw,jns_perawatan_lab.nm_perawatan,jns_perawatan_lab.total_byr,"+
@@ -2228,19 +2199,17 @@ private void BtnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                     "jns_perawatan_lab.tarif_tindakan_dokter,jns_perawatan_lab.tarif_tindakan_petugas,"+
                     "jns_perawatan_lab.kso,jns_perawatan_lab.menejemen,penjab.png_jawab "+
                     "from jns_perawatan_lab inner join penjab on penjab.kd_pj=jns_perawatan_lab.kd_pj where "+
-//                    " jns_perawatan_lab.status='1' and jns_perawatan_lab.kd_jenis_prw like ? or "+
-//                    " jns_perawatan_lab.status='1' and jns_perawatan_lab.nm_perawatan like ?  "+
-                    "jns_perawatan_lab.jnskelas='"+posisilayanan+"' and "+
-                    "jns_perawatan_lab.status='1' and jns_perawatan_lab.nm_perawatan like ? "+        
+                    " jns_perawatan_lab.status='1' and jns_perawatan_lab.kd_jenis_prw like ? or "+
+                    " jns_perawatan_lab.status='1' and jns_perawatan_lab.nm_perawatan like ?  "+
                     "order by jns_perawatan_lab.kd_jenis_prw"); 
             pstindakan3=koneksi.prepareStatement(
                     "select jns_perawatan_lab.kd_jenis_prw,jns_perawatan_lab.nm_perawatan,jns_perawatan_lab.total_byr,"+
                     "jns_perawatan_lab.bagian_rs,jns_perawatan_lab.bhp,jns_perawatan_lab.tarif_perujuk,"+
                     "jns_perawatan_lab.tarif_tindakan_dokter,jns_perawatan_lab.tarif_tindakan_petugas,"+
-                    "jns_perawatan_lab.kso,jns_perawatan_lab.menejemen,penjab.png_jawab,jns_perawatan_lab.jnskelas "+
+                    "jns_perawatan_lab.kso,jns_perawatan_lab.menejemen,penjab.png_jawab "+
                     "from jns_perawatan_lab inner join penjab on penjab.kd_pj=jns_perawatan_lab.kd_pj where "+
-                    " jns_perawatan_lab.status='1' and (jns_perawatan_lab.kd_pj=? or jns_perawatan_lab.kd_pj='-') and (jns_perawatan_lab.kelas=? or jns_perawatan_lab.kelas='-') and jns_perawatan_lab.kd_jenis_prw like ? or "+
-                    " jns_perawatan_lab.status='1' and jns_perawatan_lab.nm_perawatan like ?  and jns_perawatan_lab.jnskelas='"+posisilayanan+"' "+
+                    " jns_perawatan_lab.status='1' and (jns_perawatan_lab.kd_pj=? or jns_perawatan_lab.kd_pj='-') and (jns_perawatan_lab.jnskelas=? or jns_perawatan_lab.jnskelas='-') and jns_perawatan_lab.kd_jenis_prw like ? or "+
+                    " jns_perawatan_lab.status='1' and (jns_perawatan_lab.kd_pj=? or jns_perawatan_lab.kd_pj='-') and (jns_perawatan_lab.jnskelas=? or jns_perawatan_lab.jnskelas='-') and jns_perawatan_lab.nm_perawatan like ? "+
                     "order by jns_perawatan_lab.kd_jenis_prw");
             pstindakan4=koneksi.prepareStatement(
                     "select jns_perawatan_lab.kd_jenis_prw,jns_perawatan_lab.nm_perawatan,jns_perawatan_lab.total_byr,"+
@@ -2248,8 +2217,8 @@ private void BtnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                     "jns_perawatan_lab.tarif_tindakan_dokter,jns_perawatan_lab.tarif_tindakan_petugas,"+
                     "jns_perawatan_lab.kso,jns_perawatan_lab.menejemen,penjab.png_jawab "+
                     "from jns_perawatan_lab inner join penjab on penjab.kd_pj=jns_perawatan_lab.kd_pj where "+
-                    " jns_perawatan_lab.status='1' and (jns_perawatan_lab.kelas=? or jns_perawatan_lab.kelas='-') and jns_perawatan_lab.kd_jenis_prw like ? or "+
-                    " jns_perawatan_lab.status='1' and (jns_perawatan_lab.kelas=? or jns_perawatan_lab.kelas='-') and jns_perawatan_lab.nm_perawatan like ?  "+
+                    " jns_perawatan_lab.status='1' and (jns_perawatan_lab.jnskelas=? or jns_perawatan_lab.jnskelas='-') and jns_perawatan_lab.kd_jenis_prw like ? or "+
+                    " jns_perawatan_lab.status='1' and (jns_perawatan_lab.jnskelas=? or jns_perawatan_lab.jnskelas='-') and jns_perawatan_lab.nm_perawatan like ?  "+
                     "order by jns_perawatan_lab.kd_jenis_prw"); 
             try {
                 if(cara_bayar_lab.equals("Yes")&&kelas_lab.equals("No")){

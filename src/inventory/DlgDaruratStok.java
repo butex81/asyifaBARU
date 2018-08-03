@@ -38,7 +38,7 @@ public class DlgDaruratStok extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
 
-        Object[] row={"Kode Barang", "Nama Barang", "Satuan", "Jenis","Minimal","Saat Ini"};
+        Object[] row={"Kode Barang", "Nama Barang", "Satuan", "Jenis","Minimal","Normal","Maximal","Saat Ini"};
         tabMode=new DefaultTableModel(null,row){
               @Override public boolean isCellEditable(int rowIndex, int colIndex){return false;}
         };
@@ -47,15 +47,13 @@ public class DlgDaruratStok extends javax.swing.JDialog {
         tbDokter.setPreferredScrollableViewportSize(new Dimension(800,800));
         tbDokter.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 8; i++) {
             TableColumn column = tbDokter.getColumnModel().getColumn(i);
             if(i==0){
                 column.setPreferredWidth(90);
             }else if(i==1){
                 column.setPreferredWidth(200);
             }else if(i==2){
-                column.setPreferredWidth(100);
-            }else if(i==3){
                 column.setPreferredWidth(100);
             }else{
                 column.setPreferredWidth(80);
@@ -106,7 +104,7 @@ public class DlgDaruratStok extends javax.swing.JDialog {
             }
         });
 
-        internalFrame1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(240, 245, 235)), "::[ Darurat Stok Obat/BHP/Alkes ]::", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(90,120,80))); // NOI18N
+        internalFrame1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(240, 245, 235)), "::[ Darurat Stok Obat/BHP/Alkes ]::", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(90, 120, 80))); // NOI18N
         internalFrame1.setName("internalFrame1"); // NOI18N
         internalFrame1.setLayout(new java.awt.BorderLayout(1, 1));
 
@@ -252,7 +250,9 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                 tabMode.getValueAt(i,2).toString()+"','"+
                                 tabMode.getValueAt(i,3).toString()+"','"+
                                 tabMode.getValueAt(i,4).toString()+"','"+
-                                tabMode.getValueAt(i,5).toString()+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Sirkulasi Barang Keluar Masuk"); 
+                                tabMode.getValueAt(i,5).toString()+"','"+
+                                tabMode.getValueAt(i,6).toString()+"','"+
+                                tabMode.getValueAt(i,7).toString()+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Sirkulasi Barang Keluar Masuk"); 
             }
             Sequel.AutoComitTrue();
             Map<String, Object> param = new HashMap<>(); 
@@ -364,7 +364,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
        Valid.tabelKosong(tabMode);      
        try{   
             ps=koneksi.prepareStatement("select databarang.kode_brng, databarang.nama_brng, "
-                        + " kodesatuan.satuan,databarang.stokminimal, jenis.nama "
+                        + " kodesatuan.satuan,databarang.stokminimal,databarang.stoknormal,databarang.stokmaximal, jenis.nama "
                         + " from databarang inner join kodesatuan inner join jenis "
                         + " on databarang.kode_sat=kodesatuan.kode_sat and databarang.kdjns=jenis.kdjns "
                         + " where databarang.status='1' and databarang.kode_brng like ? or databarang.nama_brng like ? or "
@@ -394,7 +394,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         tabMode.addRow(new Object[]{
                             rs.getString("kode_brng"),rs.getString("nama_brng"),
                             rs.getString("satuan"),rs.getString("nama"),
-                            rs.getDouble("stokminimal"),stok
+                            rs.getDouble("stokminimal"),rs.getDouble("stoknormal"),rs.getDouble("stokmaximal"),stok
                         });
                     }
                 }                  

@@ -350,7 +350,7 @@ public final class DlgPenanggungJawab extends javax.swing.JDialog {
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
-        alamat.setBackground(new java.awt.Color(250, 255, 245));
+        alamat.setBackground(new java.awt.Color(255, 255, 253));
         alamat.setColumns(20);
         alamat.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         alamat.setForeground(new java.awt.Color(60, 80, 50));
@@ -807,7 +807,7 @@ private void NmKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_NmKeyP
             ps.setString(2,"%"+TCari.getText().trim()+"%");
             rs=ps.executeQuery();
             while(rs.next()){
-                tabMode.addRow(new Object[]{false,rs.getString(1),rs.getString(2)});
+                tabMode.addRow(new Object[]{false,rs.getString(1),rs.getString(2),rs.getString(3)});
             }
         }catch(SQLException e){
             System.out.println("Notifikasi : "+e);
@@ -842,9 +842,16 @@ private void NmKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_NmKeyP
     }
     
     public void isCek(){
-        BtnSimpan.setEnabled(var.getadmin());
-        BtnHapus.setEnabled(var.getadmin());
-        BtnEdit.setEnabled(var.getadmin());
-        BtnPrint.setEnabled(var.getadmin());
+        if(var.getkode().equals("Admin Utama")){
+            BtnSimpan.setEnabled(var.getadmin());
+            BtnHapus.setEnabled(var.getadmin());
+            BtnEdit.setEnabled(var.getadmin());
+            BtnPrint.setEnabled(var.getadmin());
+        }else{
+            BtnSimpan.setEnabled(var.getpenjab());
+            BtnHapus.setEnabled(var.getpenjab());
+            BtnEdit.setEnabled(var.getpenjab());
+            BtnPrint.setEnabled(var.getpenjab());
+        }                
     }
 }

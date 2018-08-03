@@ -43,7 +43,7 @@
                                     </font> 
 				</center>
 			    </td>
-			    <td  width='20%'><font color='000000' size='2'  face='Tahoma'>$carabayar</font></td>
+			    <!--td  width='20%'><font color='000000' size='2'  face='Tahoma'>$carabayar</font></td-->
                         </tr>
                   </table>
             </td>
@@ -51,11 +51,16 @@
             <tr>
               <td colspan='7' padding='0'>
                <hr/>
-                <center><font color='333333' size='1'  face='Tahoma'>BILLING</font> </center>
+                <center><font color='333333' size='1'  face='Tahoma'>STRUK PEMBAYARAN</font> </center>
               </td>
             </tr>
             ";  $z=1;
-                while($inapdrpasien = mysqli_fetch_array($hasil)) {
+                    echo "<tr class='isi12' padding='0'>
+                       <td padding='0'><font color='000000' size='1'  face='Tahoma'>Jenis Bayar</td> 
+                       <td padding='0' colspan='6'><font color='000000' size='1'  face='Tahoma'>:&nbsp;$carabayar</font></td>   
+                      </tr>"; 			                    
+
+					  while($inapdrpasien = mysqli_fetch_array($hasil)) {
                    if($z<=6){
                       echo "<tr class='isi12' padding='0'>
                                 <td padding='0' width='18%'><font color='111111' size='1'  face='Tahoma'>".str_replace("  ","&nbsp;&nbsp;",$inapdrpasien[0])."</td> 
@@ -92,12 +97,12 @@
                                      <td padding='0' width='40%' align='center'><font color='000000' size='1'  face='Tahoma'>&nbsp;</font></td>              
                                     </tr>
                                     <tr class='isi12' padding='0'>
-                                     <td padding='0' width='40%' align=center><font color='000000' size='1'  face='Tahoma'>Mengetahui,<br>a/n Direktur</td> 
+                                     <td padding='0' width='40%' align=center><font color='000000' size='1'  face='Tahoma'></td> 
                                      <td padding='0' width='20%' align=center><font color='000000' size='1'  face='Tahoma'>&nbsp;</td>     
                                      <td padding='0' width='40%' align='center'><font color='000000' size='1'  face='Tahoma'>".getOne("select kabupaten from setting").", ".$tanggal."</font></td>              
                                     </tr>  
                                     <tr class='isi12' padding='0'>
-                                     <td padding='0' width='40%' align=center><font color='000000' size='1'  face='Tahoma'>Kabid Umum & Keuangan</td> 
+                                     <td padding='0' width='40%' align=center><font color='000000' size='1'  face='Tahoma'></td> 
                                      <td padding='0' width='20%' align=center><font color='000000' size='1'  face='Tahoma'>&nbsp;</td>   
                                      <td padding='0' width='40%' align='center'><font color='000000' size='1'  face='Tahoma'>Kasir</font></td>              
                                     </tr>  
@@ -112,7 +117,7 @@
                                      <td padding='0' width='40%' align='right'><font color='000000' size='1'  face='Tahoma'></font></td>              
                                     </tr> 
                                     <tr class='isi12' padding='0'>
-                                     <td padding='0' width='40%' align=center><font color='000000' size='1'  face='Tahoma'>( ............................. )</td>     
+                                     <td padding='0' width='40%' align=center><font color='000000' size='1'  face='Tahoma'></td>     
                                      <td padding='0' width='20%' align=center><font color='000000' size='1'  face='Tahoma'>&nbsp;</td>   
                                      <td padding='0' width='40%' align='center'><font color='000000' size='1'  face='Tahoma'>(";
                                         if(getOne("select count(nama) from petugas where nip='$petugas'")>=1){

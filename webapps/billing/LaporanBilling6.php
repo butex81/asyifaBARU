@@ -11,7 +11,8 @@
         </script>
 
     <?php
-        reportsqlinjection();        
+        reportsqlinjection();
+		$norwt=str_replace("_"," ",$_GET['norawat']);
         $norawat  = "DP/".str_replace("_"," ",$_GET['norawat']); 
         $deposit  =str_replace("_"," ",$_GET['deposit']);
         $pasien   =str_replace("_"," ",$_GET['pasien']);
@@ -58,7 +59,7 @@
                             <tr>
                                <td><font color='333333' size='3'  face='Tahoma'>Telah terima dari</font></td>
                                <td><font color='333333' size='3'  face='Tahoma'>:</font></td>
-                               <td><font color='333333' size='3'  face='Tahoma'>.............................</font></td>
+                               <td><font color='333333' size='3'  face='Tahoma'>".getOne("select p_jawab from reg_periksa where no_rawat='$norwt'")."</font></td>
                             </tr>
                             <tr valign='top'>
                                <td><font color='333333' size='3'  face='Tahoma'>Uang Sebanyak</font></td>
@@ -108,7 +109,7 @@
                             <tr>
                                <td align='center'><font color='333333' size='3'  face='Tahoma'>Pasien/Keluarga Pasien </font></td>
                                <td>&nbsp;</td>
-                               <td align='right'><font color='333333' size='3'  face='Tahoma'>Adm. Keuangan&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font></td>
+                               <td align='right'><font color='333333' size='3'  face='Tahoma'>Kasir&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font></td>
                             </tr> 
                         </table>
                     </td>

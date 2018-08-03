@@ -12,7 +12,8 @@
 
     <?php
         $petugas = str_replace("_"," ",$_GET['petugas']); 
-        $tanggal = str_replace("_"," ",$_GET['tanggal']); 
+        $tanggal = str_replace("_"," ",$_GET['tanggal']);
+		$kd_asuransi = str_replace("_"," ",$_GET['kd_pj']);		
         reportsqlinjection();   
         $nonota= str_replace(": ","",getOne("select temp2 from temporary_bayar_ralan where temp9='$petugas' and temp1='No.Nota'"));
         $norawat=getOne("select no_rawat from nota_jalan where no_nota='$nonota'");
@@ -40,17 +41,26 @@
                                                                         <font color='000000' size='1'  face='Tahoma'>
                                                                             ".$setting["alamat_instansi"].", ".$setting["kabupaten"].", ".$setting["propinsi"]."<br/>
                                                                             ".$setting["kontak"].", E-mail : ".$setting["email"]."
-                                                                             <br>BILLING
+                                                                             <br /><br />STRUK PEMBAYARAN
                                                                         </font> 
                                                                     </center>
                                                                 </td>
-                                                                <td  width='20%'><font color='000000' size='2'  face='Tahoma' align='right'>$carabayar</font></td>
+                                                                <!--td  width='20%'><font color='000000' size='2'  face='Tahoma' align='right'>$carabayar</font></td-->
 							</tr>
 					  </table>
 				</td>
             </tr>
             ";  $z=1;
-                while($inapdrpasien = mysqli_fetch_array($hasil)) {
+				$hasil9=bukaquery("select kd_pj, png_jawab from penjab where kd_pj='".$kd_asuransi."'");
+                while($inapdrpasien = mysqli_fetch_array($hasil9)) {
+                    echo "<tr class='isi12' padding='0'>
+                       <td padding='0' width='30%'><font color='000000' size='1'  face='Tahoma'>Jenis Bayar</td> 
+                       <td padding='0' width='40%' colspan='6'><font color='000000' size='1'  face='Tahoma'>:&nbsp;$inapdrpasien[1]</font></td>   
+                      </tr>"; 			                    
+                } 
+                   
+
+				while($inapdrpasien = mysqli_fetch_array($hasil)) {					
                    if($z<=6){
                       echo "<tr class='isi12' padding='0'>
                                 <td padding='0' width='30%'><font color='000000' size='1'  face='Tahoma'>".str_replace("  ","&nbsp;&nbsp;",$inapdrpasien[0])."</td> 
@@ -183,7 +193,7 @@
                     if($inapdrpasien["temp1"]=="TOTAL BAYAR"){
                         echo "<tr class='isi12' padding='0'>
                                 <td padding='0' width='30%'><font color='000000' size='1'  face='Tahoma'>$inapdrpasien[0]</td> 
-                                <td padding='0' width='55%' colspan='4'><font color='000000' size='1'  face='Tahoma'>".  Terbilang(str_replace(",","",str_replace(".","",$inapdrpasien[3])))." rupiah</font></td>   
+                                <td padding='0' width='55%' colspan='4'><font color='000000' size='1'  face='Tahoma'></font></td>   
                                 <td padding='0' width='1%'><font color='000000' size='1'  face='Tahoma'></font></td>     
                                 <td padding='0' width='14%' align='right'><font color='000000' size='2'  face='Tahoma'><b>$inapdrpasien[3]</b></font></td>              
                              </tr>"; 
@@ -196,7 +206,27 @@
                              </tr>";                         
                     }                        
                 } 
-                   
+
+                $hasil8=bukaquery("select temp2,temp3,temp4 from temporary_bayar_ralan where temp8='Kasdebit' order by no asc");
+                while($inapdrpasien = mysqli_fetch_array($hasil8)) {
+                    echo "<tr class='isi12' padding='0'>
+                       <td padding='0' width='30%'><font color='000000' size='1'  face='Tahoma'></td> 
+                       <td padding='0' width='55%' colspan='4'><font color='000000' size='1'  face='Tahoma'>$inapdrpasien[0]    $inapdrpasien[2]</font></td>   
+                       <td padding='0' width='1%'><font color='000000' size='1'  face='Tahoma'></font></td>     
+                       <td padding='0' width='14%' align='right'><font color='000000' size='2'  face='Tahoma'></font></td>              
+                      </tr>"; 
+                } 
+
+                /* $hasil8=bukaquery("select temp1,temp2,temp3,temp7 from temporary_bayar_ralan where temp1='TOTAL BAYAR' group by temp2 order by no asc");
+                while($inapdrpasien = mysqli_fetch_array($hasil8)) {
+                    echo "<tr class='isi12' padding='0'>
+                       <td padding='0' width='30%'><font color='000000' size='1'  face='Tahoma'>Terbilang</td> 
+                       <td padding='0' width='55%' colspan='4'><font color='000000' size='1'  face='Tahoma'><b>".  Terbilang(str_replace(",","",str_replace(".","",$inapdrpasien[3])))." rupiah</b></font></td>   
+                       <td padding='0' width='1%'><font color='000000' size='1'  face='Tahoma'></font></td>     
+                       <td padding='0' width='14%' align='right'><font color='000000' size='2'  face='Tahoma'></font></td>              
+                      </tr>"; 
+                } */
+				
             echo "
                         <tr class='isi12' padding='0'>
 			    <td colspan='7' padding='0'>
@@ -218,14 +248,14 @@
                                      <td padding='0' width='50%' align='right'><font color='000000' size='1'  face='Tahoma'></font></td>              
                                     </tr> 
                                     <tr class='isi12' padding='0'>
+                                     <td padding='0' width='50%' align='center'><font color='000000' size='1'  face='Tahoma'></font></td>              
                                      <td padding='0' width='50%' align=center><font color='000000' size='1'  face='Tahoma'>( ";
                                         if(getOne("select count(nama) from petugas where nip='$petugas'")>=1){
-                                            echo getOne("select nama from petugas where nip='$petugas'");                                            
+											echo getOne("select nama from petugas where nip='$petugas'");                                            
                                         }else{
                                             echo " .............................. ";
                                         }
                                         echo " )</td>     
-                                     <td padding='0' width='50%' align='center'><font color='000000' size='1'  face='Tahoma'>(.............)</font></td>              
                                     </tr>   
                               </table>
                             </td>

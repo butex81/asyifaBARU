@@ -14,7 +14,6 @@ package simrskhanza;
 import fungsi.WarnaTable;
 import fungsi.batasInput;
 import fungsi.koneksiDB;
-import fungsi.sekuel;
 import fungsi.validasi;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
@@ -126,10 +125,6 @@ public final class DlgCetakInvoicePiutang extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        Popup = new javax.swing.JPopupMenu();
-        ppOrder = new javax.swing.JMenu();
-        ppOrderKode = new javax.swing.JMenuItem();
-        ppOrderNama = new javax.swing.JMenuItem();
         Kd2 = new widget.TextBox();
         internalFrame1 = new widget.InternalFrame();
         Scroll = new widget.ScrollPane();
@@ -150,55 +145,8 @@ public final class DlgCetakInvoicePiutang extends javax.swing.JDialog {
         panelisi1 = new widget.panelisi();
         BtnKeluar = new widget.Button();
 
-        Popup.setName("Popup"); // NOI18N
-
-        ppOrder.setBackground(new java.awt.Color(242, 242, 242));
-        ppOrder.setForeground(new java.awt.Color(102, 51, 0));
-        ppOrder.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/190.png"))); // NOI18N
-        ppOrder.setText("Urutkan Berdasar");
-        ppOrder.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        ppOrder.setIconTextGap(8);
-        ppOrder.setName("ppOrder"); // NOI18N
-
-        ppOrderKode.setBackground(new java.awt.Color(242, 242, 242));
-        ppOrderKode.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        ppOrderKode.setForeground(new java.awt.Color(102, 51, 0));
-        ppOrderKode.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/190.png"))); // NOI18N
-        ppOrderKode.setText("Kode Penanggung/Askes/Asuransi");
-        ppOrderKode.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        ppOrderKode.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        ppOrderKode.setIconTextGap(8);
-        ppOrderKode.setName("ppOrderKode"); // NOI18N
-        ppOrderKode.setPreferredSize(new java.awt.Dimension(300, 25));
-        ppOrderKode.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ppOrderKodeActionPerformed(evt);
-            }
-        });
-        ppOrder.add(ppOrderKode);
-
-        ppOrderNama.setBackground(new java.awt.Color(242, 242, 242));
-        ppOrderNama.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        ppOrderNama.setForeground(new java.awt.Color(102, 51, 0));
-        ppOrderNama.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/190.png"))); // NOI18N
-        ppOrderNama.setText("Nama Penanggung/Askes/Asuransi");
-        ppOrderNama.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        ppOrderNama.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        ppOrderNama.setIconTextGap(8);
-        ppOrderNama.setName("ppOrderNama"); // NOI18N
-        ppOrderNama.setPreferredSize(new java.awt.Dimension(300, 25));
-        ppOrderNama.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ppOrderNamaActionPerformed(evt);
-            }
-        });
-        ppOrder.add(ppOrderNama);
-
-        Popup.add(ppOrder);
-
         Kd2.setHighlighter(null);
         Kd2.setName("Kd2"); // NOI18N
-        Kd2.setSelectionColor(new java.awt.Color(255, 255, 255));
         Kd2.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 Kd2KeyPressed(evt);
@@ -218,7 +166,6 @@ public final class DlgCetakInvoicePiutang extends javax.swing.JDialog {
         internalFrame1.setName("internalFrame1"); // NOI18N
         internalFrame1.setLayout(new java.awt.BorderLayout(1, 1));
 
-        Scroll.setComponentPopupMenu(Popup);
         Scroll.setName("Scroll"); // NOI18N
         Scroll.setOpaque(true);
 
@@ -232,7 +179,6 @@ public final class DlgCetakInvoicePiutang extends javax.swing.JDialog {
             }
         ));
         tbInvoice.setToolTipText("Silahkan klik untuk memilih data yang mau diedit ataupun dihapus");
-        tbInvoice.setComponentPopupMenu(Popup);
         tbInvoice.setName("tbInvoice"); // NOI18N
         tbInvoice.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -260,6 +206,7 @@ public final class DlgCetakInvoicePiutang extends javax.swing.JDialog {
 
         Nm.setHighlighter(null);
         Nm.setName("Nm"); // NOI18N
+        Nm.setSelectionColor(new java.awt.Color(0, 0, 0));
         Nm.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 NmKeyPressed(evt);
@@ -457,14 +404,6 @@ private void NmKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_NmKeyP
    
 }//GEN-LAST:event_NmKeyPressed
 
-    private void ppOrderKodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ppOrderKodeActionPerformed
-        tampil();
-    }//GEN-LAST:event_ppOrderKodeActionPerformed
-
-    private void ppOrderNamaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ppOrderNamaActionPerformed
-        tampil();
-    }//GEN-LAST:event_ppOrderNamaActionPerformed
-
     private void Kd2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Kd2KeyPressed
         // TODO add your handling code here:
     }//GEN-LAST:event_Kd2KeyPressed
@@ -496,7 +435,6 @@ private void NmKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_NmKeyP
     private widget.TextBox Kd2;
     private widget.Label LCount;
     private widget.TextBox Nm;
-    private javax.swing.JPopupMenu Popup;
     private widget.ScrollPane Scroll;
     private widget.TextBox TCari;
     private widget.Tanggal Tgl1;
@@ -509,9 +447,6 @@ private void NmKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_NmKeyP
     private widget.panelisi panelisi1;
     private widget.panelisi panelisi3;
     private widget.panelisi panelisi4;
-    private javax.swing.JMenu ppOrder;
-    private javax.swing.JMenuItem ppOrderKode;
-    private javax.swing.JMenuItem ppOrderNama;
     private widget.Table tbInvoice;
     // End of variables declaration//GEN-END:variables
 
