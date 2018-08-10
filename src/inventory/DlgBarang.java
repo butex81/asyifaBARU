@@ -94,6 +94,7 @@ public class DlgBarang extends javax.swing.JDialog {
         label38.setVisible(false);
         label26.setVisible(false);
         label28.setVisible(false);
+        label16.setVisible(false);
         kelas3.setVisible(false);
         utama.setVisible(false);
         kelasvip.setVisible(false);
@@ -103,6 +104,7 @@ public class DlgBarang extends javax.swing.JDialog {
         karyawan.setVisible(false);
         kelas1.setVisible(false);
         kelas2.setVisible(false);
+        stok_normal.setVisible(false);
         
         Object[] row = {
             "P", "Kode Barang", "Nama Barang", "Kode Satuan", "Nama Satuan", "Letak Barang",
@@ -188,7 +190,8 @@ public class DlgBarang extends javax.swing.JDialog {
             } else if (i == 17) {
                 column.setPreferredWidth(95);
             } else if (i == 18) {
-                column.setPreferredWidth(95);
+                column.setMinWidth(0);
+                column.setMaxWidth(0);
             } else if (i == 19) {
                 column.setPreferredWidth(95);
             } else if (i == 20) {
@@ -603,7 +606,7 @@ public class DlgBarang extends javax.swing.JDialog {
         ppBarcode.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         ppBarcode.setForeground(new java.awt.Color(60, 80, 50));
         ppBarcode.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/category.png"))); // NOI18N
-        ppBarcode.setText("Barcode");
+        ppBarcode.setText("Cetak Barcode");
         ppBarcode.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         ppBarcode.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         ppBarcode.setIconTextGap(8);
@@ -620,7 +623,7 @@ public class DlgBarang extends javax.swing.JDialog {
         ppBarcodeItem.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         ppBarcodeItem.setForeground(new java.awt.Color(60, 80, 50));
         ppBarcodeItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/category.png"))); // NOI18N
-        ppBarcodeItem.setText("Barcode Perbarang");
+        ppBarcodeItem.setText("Cetak Barcode Perbarang");
         ppBarcodeItem.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         ppBarcodeItem.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         ppBarcodeItem.setIconTextGap(8);
@@ -1031,7 +1034,7 @@ public class DlgBarang extends javax.swing.JDialog {
         label27.setName("label27"); // NOI18N
         label27.setPreferredSize(new java.awt.Dimension(65, 23));
         FormInput.add(label27);
-        label27.setBounds(550, 190, 108, 23);
+        label27.setBounds(550, 160, 108, 23);
 
         ralan.setName("ralan"); // NOI18N
         ralan.setPreferredSize(new java.awt.Dimension(207, 23));
@@ -1051,7 +1054,7 @@ public class DlgBarang extends javax.swing.JDialog {
             }
         });
         FormInput.add(ralan);
-        ralan.setBounds(660, 190, 110, 23);
+        ralan.setBounds(660, 160, 110, 23);
 
         nmsat.setEditable(false);
         nmsat.setName("nmsat"); // NOI18N
@@ -1153,7 +1156,7 @@ public class DlgBarang extends javax.swing.JDialog {
         label29.setName("label29"); // NOI18N
         label29.setPreferredSize(new java.awt.Dimension(65, 23));
         FormInput.add(label29);
-        label29.setBounds(550, 160, 108, 23);
+        label29.setBounds(550, 130, 108, 23);
 
         beli.setName("beli"); // NOI18N
         beli.setPreferredSize(new java.awt.Dimension(207, 23));
@@ -1173,7 +1176,7 @@ public class DlgBarang extends javax.swing.JDialog {
             }
         });
         FormInput.add(beli);
-        beli.setBounds(660, 160, 110, 23);
+        beli.setBounds(660, 130, 110, 23);
 
         label32.setText("Kapasitas :");
         label32.setName("label32"); // NOI18N
@@ -1374,7 +1377,7 @@ public class DlgBarang extends javax.swing.JDialog {
         karyawan.setBounds(1020, 190, 110, 23);
 
         DTPExpired.setForeground(new java.awt.Color(50, 70, 50));
-        DTPExpired.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "03-08-2018" }));
+        DTPExpired.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "09-08-2018" }));
         DTPExpired.setDisplayFormat("dd-MM-yyyy");
         DTPExpired.setName("DTPExpired"); // NOI18N
         DTPExpired.setOpaque(false);
@@ -1509,7 +1512,7 @@ public class DlgBarang extends javax.swing.JDialog {
         label39.setName("label39"); // NOI18N
         label39.setPreferredSize(new java.awt.Dimension(65, 23));
         FormInput.add(label39);
-        label39.setBounds(550, 130, 108, 23);
+        label39.setBounds(550, 100, 108, 23);
 
         markup.setName("markup"); // NOI18N
         markup.setPreferredSize(new java.awt.Dimension(207, 23));
@@ -1529,13 +1532,13 @@ public class DlgBarang extends javax.swing.JDialog {
             }
         });
         FormInput.add(markup);
-        markup.setBounds(660, 130, 110, 23);
+        markup.setBounds(660, 100, 110, 23);
 
         label15.setText("Stok Maximal Barang :");
         label15.setName("label15"); // NOI18N
         label15.setPreferredSize(new java.awt.Dimension(85, 23));
         FormInput.add(label15);
-        label15.setBounds(520, 100, 135, 23);
+        label15.setBounds(520, 70, 135, 23);
 
         stok_maximal.setHighlighter(null);
         stok_maximal.setName("stok_maximal"); // NOI18N
@@ -1555,13 +1558,13 @@ public class DlgBarang extends javax.swing.JDialog {
             }
         });
         FormInput.add(stok_maximal);
-        stok_maximal.setBounds(660, 100, 110, 23);
+        stok_maximal.setBounds(660, 70, 110, 23);
 
         label16.setText("Pemesanan Stok Normal :");
         label16.setName("label16"); // NOI18N
         label16.setPreferredSize(new java.awt.Dimension(85, 23));
         FormInput.add(label16);
-        label16.setBounds(520, 70, 135, 23);
+        label16.setBounds(1130, 80, 135, 23);
 
         stok_normal.setHighlighter(null);
         stok_normal.setName("stok_normal"); // NOI18N
@@ -1581,7 +1584,7 @@ public class DlgBarang extends javax.swing.JDialog {
             }
         });
         FormInput.add(stok_normal);
-        stok_normal.setBounds(660, 70, 110, 23);
+        stok_normal.setBounds(1270, 80, 110, 23);
 
         PanelInput.add(FormInput, java.awt.BorderLayout.CENTER);
 

@@ -38,7 +38,7 @@ public class DlgDaruratStok extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
 
-        Object[] row={"Kode Barang", "Nama Barang", "Satuan", "Jenis","Minimal","Normal","Maximal","Saat Ini"};
+        Object[] row={"Kode Barang", "Nama Barang", "Satuan", "Jenis","Minimal","Maximal","Saat Ini","Harga Beli"};
         tabMode=new DefaultTableModel(null,row){
               @Override public boolean isCellEditable(int rowIndex, int colIndex){return false;}
         };
@@ -55,6 +55,9 @@ public class DlgDaruratStok extends javax.swing.JDialog {
                 column.setPreferredWidth(200);
             }else if(i==2){
                 column.setPreferredWidth(100);
+            //}else if(i==7){
+            //    column.setMinWidth(0);
+            //    column.setMaxWidth(0);
             }else{
                 column.setPreferredWidth(80);
             }
@@ -364,7 +367,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
        Valid.tabelKosong(tabMode);      
        try{   
             ps=koneksi.prepareStatement("select databarang.kode_brng, databarang.nama_brng, "
-                        + " kodesatuan.satuan,databarang.stokminimal,databarang.stoknormal,databarang.stokmaximal, jenis.nama "
+                        + " kodesatuan.satuan,databarang.stokminimal,databarang.stokmaximal, jenis.nama, databarang.h_beli "
                         + " from databarang inner join kodesatuan inner join jenis "
                         + " on databarang.kode_sat=kodesatuan.kode_sat and databarang.kdjns=jenis.kdjns "
                         + " where databarang.status='1' and databarang.kode_brng like ? or databarang.nama_brng like ? or "
@@ -394,7 +397,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         tabMode.addRow(new Object[]{
                             rs.getString("kode_brng"),rs.getString("nama_brng"),
                             rs.getString("satuan"),rs.getString("nama"),
-                            rs.getDouble("stokminimal"),rs.getDouble("stoknormal"),rs.getDouble("stokmaximal"),stok
+                            rs.getDouble("stokminimal"),rs.getDouble("stokmaximal"), stok, rs.getDouble("h_beli")
                         });
                     }
                 }                  
