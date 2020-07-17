@@ -103,7 +103,7 @@ public final class DlgPenanggungJawab extends javax.swing.JDialog {
         } 
         try{
             ps=koneksi.prepareStatement("select kd_pj, png_jawab, alamat "+
-                " from penjab where  kd_pj like ? or png_jawab like ? order by png_jawab ");
+                " from penjab where png_jawab not like '%hapus%' and ( kd_pj like ? or png_jawab like ? ) order by png_jawab ");
         }catch(Exception ex){
             System.out.println(ex);
         }
@@ -651,9 +651,9 @@ public final class DlgPenanggungJawab extends javax.swing.JDialog {
             BtnBatal.requestFocus();
         }else if(tabMode.getRowCount()!=0){            
             Valid.MyReport("rptPenjab.jrxml","report","::[ Data Satuan ]::","select kd_pj, png_jawab, alamat "+
-                " from penjab where  kd_pj like '%"+TCari.getText().trim()+"%' or "+
+                " from penjab where png_jawab not like '%hapus%' and (kd_pj like '%"+TCari.getText().trim()+"%' or "+
                 " png_jawab like '%"+TCari.getText().trim()+"%' or "+
-                " alamat like '%"+TCari.getText().trim()+"%' order by kd_pj");
+                " alamat like '%"+TCari.getText().trim()+"%') order by kd_pj");
         }
         this.setCursor(Cursor.getDefaultCursor());
 }//GEN-LAST:event_BtnPrintActionPerformed
