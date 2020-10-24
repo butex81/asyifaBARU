@@ -61,7 +61,7 @@
 	<detail>
 		<band height="523" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="90" width="555" height="14"/>
+				<reportElement x="0" y="89" width="555" height="14"/>
 				<textElement textAlignment="Center" lineSpacing="Single">
 					<font fontName="Tahoma" size="10"/>
 				</textElement>
@@ -239,14 +239,14 @@
 				<textElement textAlignment="Center" lineSpacing="Single">
 					<font fontName="Tahoma" size="10"/>
 				</textElement>
-				<textFieldExpression class="java.util.Date"><![CDATA[$F{tanggal}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{tanggal}]]></textFieldExpression>
 			</textField>
 			<textField pattern="HH.mm.ss">
 				<reportElement x="373" y="254" width="81" height="15"/>
 				<textElement textAlignment="Center" lineSpacing="Single">
 					<font fontName="Tahoma" size="10"/>
 				</textElement>
-				<textFieldExpression class="java.sql.Time"><![CDATA[$F{jam}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{jam}]]></textFieldExpression>
 			</textField>
 			<line direction="BottomUp">
 				<reportElement x="128" y="119" width="129" height="1"/>
@@ -340,7 +340,7 @@
 			</line>
 			<image scaleImage="FillFrame" onErrorType="Blank">
 				<reportElement x="10" y="11" width="48" height="45"/>
-				<imageExpression class="java.io.InputStream"><![CDATA[$P{logo}]]></imageExpression>
+				<imageExpression class="java.lang.String"><![CDATA[$P{logo}]]></imageExpression>
 			</image>
 		</band>
 	</detail>
