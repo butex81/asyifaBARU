@@ -51,6 +51,7 @@ public final class DlgRincianPiutangPasien extends javax.swing.JDialog {
              ttlService=0,ttlUangMuka=0,ttlCicilan=0;
     private int i;
     private String biaya="";
+    private String varstatus="";
 
     /** Creates new form DlgLhtBiaya
      * @param parent
@@ -243,13 +244,13 @@ public final class DlgRincianPiutangPasien extends javax.swing.JDialog {
         kdpenjab = new widget.TextBox();
         nmpenjab = new widget.TextBox();
         BtnSeek2 = new widget.Button();
+        status_lanjut = new widget.ComboBox();
 
         TKd.setForeground(new java.awt.Color(255, 255, 255));
         TKd.setName("TKd"); // NOI18N
 
         jPopupMenu1.setName("jPopupMenu1"); // NOI18N
 
-        mnInvoice.setBackground(new java.awt.Color(255, 255, 255));
         mnInvoice.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         mnInvoice.setForeground(java.awt.Color.darkGray);
         mnInvoice.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/category.png"))); // NOI18N
@@ -266,7 +267,6 @@ public final class DlgRincianPiutangPasien extends javax.swing.JDialog {
         });
         jPopupMenu1.add(mnInvoice);
 
-        mnKwitansi.setBackground(new java.awt.Color(255, 255, 255));
         mnKwitansi.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         mnKwitansi.setForeground(java.awt.Color.darkGray);
         mnKwitansi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/category.png"))); // NOI18N
@@ -292,7 +292,7 @@ public final class DlgRincianPiutangPasien extends javax.swing.JDialog {
             }
         });
 
-        internalFrame1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(240, 245, 235)), "::[ Data Rincian Piutang Pasien Per Cara Bayar di Pendaftaran ]::", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(90, 120, 80))); // NOI18N
+        internalFrame1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(240, 245, 235)), "::[ Data Rincian Piutang Pasien Per Cara Bayar di Pendaftaran ]::", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Lucida Grande", 0, 13), new java.awt.Color(90, 120, 80))); // NOI18N
         internalFrame1.setMinimumSize(new java.awt.Dimension(846, 136));
         internalFrame1.setName("internalFrame1"); // NOI18N
         internalFrame1.setLayout(new java.awt.BorderLayout(1, 1));
@@ -451,7 +451,7 @@ public final class DlgRincianPiutangPasien extends javax.swing.JDialog {
         label11.setPreferredSize(new java.awt.Dimension(80, 23));
         panelisi4.add(label11);
 
-        Tgl1.setEditable(false);
+        Tgl1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "12-10-2020" }));
         Tgl1.setDisplayFormat("dd-MM-yyyy");
         Tgl1.setName("Tgl1"); // NOI18N
         Tgl1.setPreferredSize(new java.awt.Dimension(100, 23));
@@ -463,7 +463,6 @@ public final class DlgRincianPiutangPasien extends javax.swing.JDialog {
         label18.setPreferredSize(new java.awt.Dimension(30, 23));
         panelisi4.add(label18);
 
-        Tgl2.setEditable(false);
         Tgl2.setDisplayFormat("dd-MM-yyyy");
         Tgl2.setName("Tgl2"); // NOI18N
         Tgl2.setPreferredSize(new java.awt.Dimension(100, 23));
@@ -504,6 +503,11 @@ public final class DlgRincianPiutangPasien extends javax.swing.JDialog {
             }
         });
         panelisi4.add(BtnSeek2);
+
+        status_lanjut.setForeground(new java.awt.Color(153, 0, 51));
+        status_lanjut.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Semua", "Ralan", "Ranap" }));
+        status_lanjut.setName("status_lanjut"); // NOI18N
+        panelisi4.add(status_lanjut);
 
         internalFrame1.add(panelisi4, java.awt.BorderLayout.PAGE_START);
 
@@ -849,6 +853,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     private widget.TextBox nmpenjab;
     private widget.panelisi panelGlass5;
     private widget.panelisi panelisi4;
+    private widget.ComboBox status_lanjut;
     private widget.Table tbBangsal;
     // End of variables declaration//GEN-END:variables
 
@@ -856,16 +861,31 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
         Valid.tabelKosong(tabMode);
         try{
             sisapiutang=0;
+            varstatus = status_lanjut.getSelectedItem().toString();
+            if (varstatus.equals("Semua")){
             ps=koneksi.prepareStatement("select piutang_pasien.no_rawat, piutang_pasien.tgl_piutang, concat(piutang_pasien.no_rkm_medis,' ',pasien.nm_pasien) as pasien, "+
-                       "piutang_pasien.status,piutang_pasien.totalpiutang, piutang_pasien.uangmuka, piutang_pasien.sisapiutang, piutang_pasien.tgltempo,penjab.png_jawab "+
+                       "piutang_pasien.status,piutang_pasien.totalpiutang, piutang_pasien.uangmuka, piutang_pasien.sisapiutang, piutang_pasien.tgltempo,penjab.png_jawab, reg_periksa.status_lanjut "+
                        "from piutang_pasien inner join pasien inner join reg_periksa inner join penjab on  "+
                        "piutang_pasien.no_rkm_medis=pasien.no_rkm_medis and "+
                        "piutang_pasien.no_rawat=reg_periksa.no_rawat and "+
                        "reg_periksa.kd_pj=penjab.kd_pj where "+
-                       "penjab.png_jawab like ? and piutang_pasien.no_rawat like ? and piutang_pasien.tgl_piutang between ? and ? or "+
-                       "penjab.png_jawab like ? and piutang_pasien.no_rkm_medis like ? and piutang_pasien.tgl_piutang between ? and ? or "+
-                       "penjab.png_jawab like ? and pasien.nm_pasien like ? and piutang_pasien.tgl_piutang between ? and ? or "+
-                       "penjab.png_jawab like ? and piutang_pasien.status like ? and piutang_pasien.tgl_piutang between ? and ? order by piutang_pasien.tgl_piutang");
+                       "penjab.png_jawab like ? and reg_periksa.status_lanjut <> ? and piutang_pasien.no_rawat like ? and piutang_pasien.tgl_piutang between ? and ? or "+
+                       "penjab.png_jawab like ? and reg_periksa.status_lanjut <> ? and piutang_pasien.no_rkm_medis like ? and piutang_pasien.tgl_piutang between ? and ? or "+
+                       "penjab.png_jawab like ? and reg_periksa.status_lanjut <> ? and pasien.nm_pasien like ? and piutang_pasien.tgl_piutang between ? and ? or "+
+                       "penjab.png_jawab like ? and reg_periksa.status_lanjut <> ? and piutang_pasien.status like ? and piutang_pasien.tgl_piutang between ? and ? order by piutang_pasien.tgl_piutang");
+                
+            }else{
+            ps=koneksi.prepareStatement("select piutang_pasien.no_rawat, piutang_pasien.tgl_piutang, concat(piutang_pasien.no_rkm_medis,' ',pasien.nm_pasien) as pasien, "+
+                       "piutang_pasien.status,piutang_pasien.totalpiutang, piutang_pasien.uangmuka, piutang_pasien.sisapiutang, piutang_pasien.tgltempo,penjab.png_jawab, reg_periksa.status_lanjut "+
+                       "from piutang_pasien inner join pasien inner join reg_periksa inner join penjab on  "+
+                       "piutang_pasien.no_rkm_medis=pasien.no_rkm_medis and "+
+                       "piutang_pasien.no_rawat=reg_periksa.no_rawat and "+
+                       "reg_periksa.kd_pj=penjab.kd_pj where "+
+                       "penjab.png_jawab like ? and reg_periksa.status_lanjut like ? and piutang_pasien.no_rawat like ? and piutang_pasien.tgl_piutang between ? and ? or "+
+                       "penjab.png_jawab like ? and reg_periksa.status_lanjut like ? and piutang_pasien.no_rkm_medis like ? and piutang_pasien.tgl_piutang between ? and ? or "+
+                       "penjab.png_jawab like ? and reg_periksa.status_lanjut like ? and pasien.nm_pasien like ? and piutang_pasien.tgl_piutang between ? and ? or "+
+                       "penjab.png_jawab like ? and reg_periksa.status_lanjut like ? and piutang_pasien.status like ? and piutang_pasien.tgl_piutang between ? and ? order by piutang_pasien.tgl_piutang");
+            }
             try {
                 all=0;ttlLaborat=0;ttlRadiologi=0;ttlOperasi=0;ttlObat=0;
                 ttlRanap_Dokter=0;ttlRanap_Paramedis=0;ttlRalan_Dokter=0;
@@ -873,21 +893,25 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                 ttlRegistrasi=0;ttlHarian=0;ttlRetur_Obat=0;ttlResep_Pulang=0;
                 ttlService=0;sisapiutang=0;ttlUangMuka=0;ttlCicilan=0;
                 ps.setString(1,"%"+nmpenjab.getText()+"%");
-                ps.setString(2,"%"+TCari.getText()+"%");
-                ps.setString(3, Valid.SetTgl(Tgl1.getSelectedItem()+""));
-                ps.setString(4, Valid.SetTgl(Tgl2.getSelectedItem()+""));
-                ps.setString(5,"%"+nmpenjab.getText()+"%");
-                ps.setString(6,"%"+TCari.getText()+"%");
-                ps.setString(7, Valid.SetTgl(Tgl1.getSelectedItem()+""));
-                ps.setString(8, Valid.SetTgl(Tgl2.getSelectedItem()+""));
-                ps.setString(9,"%"+nmpenjab.getText()+"%");
-                ps.setString(10,"%"+TCari.getText()+"%");
-                ps.setString(11, Valid.SetTgl(Tgl1.getSelectedItem()+""));
-                ps.setString(12, Valid.SetTgl(Tgl2.getSelectedItem()+""));
-                ps.setString(13,"%"+nmpenjab.getText()+"%");
-                ps.setString(14,"%"+TCari.getText()+"%");
-                ps.setString(15, Valid.SetTgl(Tgl1.getSelectedItem()+""));
-                ps.setString(16, Valid.SetTgl(Tgl2.getSelectedItem()+""));
+                ps.setString(2, "%"+varstatus+"%");
+                ps.setString(3,"%"+TCari.getText()+"%");
+                ps.setString(4, Valid.SetTgl(Tgl1.getSelectedItem()+""));
+                ps.setString(5, Valid.SetTgl(Tgl2.getSelectedItem()+""));
+                ps.setString(6,"%"+nmpenjab.getText()+"%");
+                ps.setString(7, "%"+varstatus+"%");
+                ps.setString(8,"%"+TCari.getText()+"%");
+                ps.setString(9, Valid.SetTgl(Tgl1.getSelectedItem()+""));
+                ps.setString(10, Valid.SetTgl(Tgl2.getSelectedItem()+""));
+                ps.setString(11,"%"+nmpenjab.getText()+"%");
+                ps.setString(12, "%"+varstatus+"%");
+                ps.setString(13,"%"+TCari.getText()+"%");
+                ps.setString(14, Valid.SetTgl(Tgl1.getSelectedItem()+""));
+                ps.setString(15, Valid.SetTgl(Tgl2.getSelectedItem()+""));
+                ps.setString(16,"%"+nmpenjab.getText()+"%");
+                ps.setString(17, "%"+varstatus+"%");
+                ps.setString(18,"%"+TCari.getText()+"%");
+                ps.setString(19, Valid.SetTgl(Tgl1.getSelectedItem()+""));
+                ps.setString(20, Valid.SetTgl(Tgl2.getSelectedItem()+""));
                 rs=ps.executeQuery();
                 while(rs.next()){                    
                     Laborat=0; 

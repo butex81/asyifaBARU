@@ -438,7 +438,7 @@
                     </Property>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                       <StringArray count="1">
-                        <StringItem index="0" value="16-05-2018"/>
+                        <StringItem index="0" value="12-10-2020"/>
                       </StringArray>
                     </Property>
                     <Property name="displayFormat" type="java.lang.String" value="dd-MM-yyyy"/>
@@ -485,7 +485,6 @@
                       </StringArray>
                     </Property>
                     <Property name="name" type="java.lang.String" value="CmbJam" noResource="true"/>
-                    <Property name="opaque" type="boolean" value="false"/>
                   </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
@@ -560,7 +559,6 @@
                       </StringArray>
                     </Property>
                     <Property name="name" type="java.lang.String" value="CmbMenit" noResource="true"/>
-                    <Property name="opaque" type="boolean" value="false"/>
                   </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
@@ -635,7 +633,6 @@
                       </StringArray>
                     </Property>
                     <Property name="name" type="java.lang.String" value="CmbDetik" noResource="true"/>
-                    <Property name="opaque" type="boolean" value="false"/>
                   </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">

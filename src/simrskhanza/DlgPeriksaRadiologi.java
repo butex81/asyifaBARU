@@ -1508,11 +1508,11 @@ private void ChkJlnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:
             pilihan = (String)JOptionPane.showInputDialog(null,"Silahkan pilih hasil pemeriksaan..!","Hasil Pemeriksaan",JOptionPane.QUESTION_MESSAGE,null,new Object[]{"Model 1","Model 2", "Model 3"},"Model 1");
             switch (pilihan) {
                 case "Model 1":
-                      Valid.MyReport("rptPeriksaRadiologi.jrxml","report","::[ Pemeriksaan Radiologi ]::",
+                      Valid.MyReport("rptPeriksaRadiologi2.jrxml","report","::[ Pemeriksaan Radiologi ]::",
                                 "select current_date as tanggal",param);
                       break;
                 case "Model 2":
-                      Valid.MyReport("rptPeriksaRadiologi2.jrxml","report","::[ Pemeriksaan Radiologi ]::",
+                      Valid.MyReport("rptPeriksaRadiologi.jrxml","report","::[ Pemeriksaan Radiologi ]::",
                                 "select current_date as tanggal",param);
                       break;
                 case "Model 3":

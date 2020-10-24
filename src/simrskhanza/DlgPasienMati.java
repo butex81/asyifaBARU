@@ -47,7 +47,7 @@ public class DlgPasienMati extends javax.swing.JDialog {
     private DlgPasien pasien=new DlgPasien(null,false);
     private PreparedStatement ps;
     private ResultSet rs;
-    private String sql=" pasien_mati.no_rkm_medis=pasien.no_rkm_medis  ";
+    private String sql=" pasien_mati.no_rkm_medis=pasien.no_rkm_medis  ", pilihan="";
     /** Creates new form DlgPasienMati
      * @param parent
      * @param modal */
@@ -858,12 +858,27 @@ private void MnCetakSuratMatiActionPerformed(java.awt.event.ActionEvent evt) {//
                 param.put("kontakrs",var.getkontakrs());
                 param.put("emailrs",var.getemailrs());   
                 param.put("logo",Sequel.cariGambar("select logo from setting")); 
-          Valid.MyReport("rptSuratKematian.jrxml","report","::[ Surat Kematian ]::",
-                        "select tanggal,jam,pasien_mati.no_rkm_medis,pasien.nm_pasien, "+
-                        "pasien.umur,pasien.alamat,jk,tmp_lahir,tgl_lahir,gol_darah,stts_nikah, "+
-                        "agama,keterangan from pasien_mati,pasien "+
-                        "where pasien_mati.no_rkm_medis=pasien.no_rkm_medis "+
-                        "and pasien_mati.no_rkm_medis='"+TNoRM.getText()+"' ",param);
+
+            pilihan = (String)JOptionPane.showInputDialog(null,"Silahkan pilih ukuran surat..!","Ukuran Surat",JOptionPane.QUESTION_MESSAGE,null,new Object[]{"A4","A5"},"A4");
+            switch (pilihan) {
+                case "A4":
+                    Valid.MyReport("rptSuratKematianA4.jrxml","report","::[ Surat Kematian ]::",
+                                  "select tanggal,jam,pasien_mati.no_rkm_medis,pasien.nm_pasien, "+
+                                  "pasien.umur,pasien.alamat,jk,tmp_lahir,tgl_lahir,gol_darah,stts_nikah, "+
+                                  "agama,keterangan from pasien_mati,pasien "+
+                                  "where pasien_mati.no_rkm_medis=pasien.no_rkm_medis "+
+                                  "and pasien_mati.no_rkm_medis='"+TNoRM.getText()+"' ",param);
+                      break;
+                case "A5":
+                    Valid.MyReport("rptSuratKematian.jrxml","report","::[ Surat Kematian ]::",
+                                  "select tanggal,jam,pasien_mati.no_rkm_medis,pasien.nm_pasien, "+
+                                  "pasien.umur,pasien.alamat,jk,tmp_lahir,tgl_lahir,gol_darah,stts_nikah, "+
+                                  "agama,keterangan from pasien_mati,pasien "+
+                                  "where pasien_mati.no_rkm_medis=pasien.no_rkm_medis "+
+                                  "and pasien_mati.no_rkm_medis='"+TNoRM.getText()+"' ",param);
+                      break;
+            }
+                
       }
 }//GEN-LAST:event_MnCetakSuratMatiActionPerformed
 
